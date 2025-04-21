@@ -4,13 +4,11 @@ abstract class ProdukState extends Equatable {}
 
 class ProdukInitial extends ProdukState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
 class ProdukStateLoading extends ProdukState {
   @override
-  // TODO: implement props
   List<Object?> get props => [];
 }
 
@@ -19,7 +17,6 @@ class ProdukStateError extends ProdukState {
 
   ProdukStateError({required this.message});
   @override
-  // TODO: implement props
   List<Object?> get props => [message];
 }
 
@@ -29,7 +26,6 @@ class ProdukStateLoadedAll extends ProdukState {
   ProdukStateLoadedAll({required this.produks});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [produks];
 }
 
@@ -39,6 +35,12 @@ class ProdukStateLoaded extends ProdukState {
   ProdukStateLoaded({required this.produk});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [produk];
+}
+
+class ProdukStateSuccess extends ProdukState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+  
 }

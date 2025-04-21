@@ -28,3 +28,16 @@ class ProdukEventDelete extends ProdukEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class ProdukEventGetAll extends ProdukEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProdukEventGetById extends ProdukEvent {
+  final String id;
+
+  ProdukEventGetById({required this.id});
+  @override
+  List<Object?> get props => [id];
+}
