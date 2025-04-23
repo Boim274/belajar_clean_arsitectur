@@ -1,17 +1,17 @@
-import 'package:belajar_clean_arsitectur/features/produk/data/models/produk_model.dart';
-import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/kategori_produk/data/models/kategori_produk_model.dart';
+import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class ProdukPages extends StatelessWidget {
-  const ProdukPages({super.key});
+class KategoriPages extends StatelessWidget {
+  const KategoriPages({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produk Pages'),
+        title: const Text('Kategori Pages'),
         actions: [
           IconButton(
             onPressed: () {
@@ -19,11 +19,9 @@ class ProdukPages extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
-                  TextEditingController namaProdukController =
+                  TextEditingController namaKategoriController =
                       TextEditingController();
-                  TextEditingController hargaProdukController =
-                      TextEditingController();
-                  TextEditingController deskripsiProdukController =
+                  TextEditingController deskripsiKategoriController =
                       TextEditingController();
 
                   // Form Key untuk validasi
@@ -36,48 +34,32 @@ class ProdukPages extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Input Nama Produk
+                          // Input Nama Kategori
                           TextFormField(
-                            controller: namaProdukController,
+                            controller: namaKategoriController,
                             decoration: const InputDecoration(
-                              labelText: 'Nama Produk',
+                              labelText: 'Nama Kategori',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Nama produk tidak boleh kosong';
+                                return 'Nama Kategori tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
 
-                          // Input Harga Produk
+                          // Input Deskripsi Kategori
                           TextFormField(
-                            controller: hargaProdukController,
+                            controller: deskripsiKategoriController,
                             decoration: const InputDecoration(
-                              labelText: 'Harga Produk',
+                              labelText: 'Deskripsi Kategori',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Harga produk tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Input Deskripsi Produk
-                          TextFormField(
-                            controller: deskripsiProdukController,
-                            decoration: const InputDecoration(
-                              labelText: 'Deskripsi Produk',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Deskripsi produk tidak boleh kosong';
+                                return 'Deskripsi Kategori tidak boleh kosong';
                               }
                               return null;
                             },
@@ -85,17 +67,17 @@ class ProdukPages extends StatelessWidget {
                           const SizedBox(height: 20),
 
                           // Tombol Simpan dengan validasi
-                          BlocConsumer<ProdukBloc, ProdukState>(
+                          BlocConsumer<KategoriProdukBloc, KategoriProdukState>(
                             listener: (context, state) {
-                              if (state is ProdukStateError) {
+                              if (state is KategoriProdukStateError) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(state.message)));
                               }
-                              if (state is ProdukStateSuccess) {
+                              if (state is KategoriProdukStateSuccess) {
                                 context.pop();
                                 context
-                                    .read<ProdukBloc>()
-                                    .add(ProdukEventGetAll());
+                                    .read<KategoriProdukBloc>()
+                                    .add(KategoriProdukEventGetAll());
                               }
                             },
                             builder: (context, state) {
@@ -104,26 +86,26 @@ class ProdukPages extends StatelessWidget {
                                   if (formKey.currentState?.validate() ??
                                       false) {
                                     // Kirim event add jika form valid
-                                    context.read<ProdukBloc>().add(
-                                          ProdukEventAdd(
-                                            produkModel: ProdukModel(
+                                    context.read<KategoriProdukBloc>().add(
+                                          KategoriProdukEventAdd(
+                                            kategoriProdukModel:
+                                                KategoriProdukModel(
                                               id: '',
-                                              namaProduk:
-                                                  namaProdukController.text,
-                                              harga: hargaProdukController.text,
+                                              namaKategori:
+                                                  namaKategoriController.text,
                                               deskripsi:
-                                                  deskripsiProdukController
+                                                  deskripsiKategoriController
                                                       .text,
                                             ),
                                           ),
                                         );
                                   }
                                 },
-                                icon: state is ProdukStateLoading
+                                icon: state is KategoriProdukStateLoading
                                     ? const CircularProgressIndicator(
                                         color: Colors.white)
                                     : const Icon(Icons.save),
-                                label: const Text('Simpan Produk'),
+                                label: const Text('Simpan Kategori'),
                               );
                             },
                           ),
@@ -138,37 +120,40 @@ class ProdukPages extends StatelessWidget {
           )
         ],
       ),
-      body: BlocBuilder<ProdukBloc, ProdukState>(
-        bloc: context.read<ProdukBloc>()..add(ProdukEventGetAll()),
+      body: BlocBuilder<KategoriProdukBloc, KategoriProdukState>(
+        bloc: context.read<KategoriProdukBloc>()
+          ..add(KategoriProdukEventGetAll()),
         builder: (context, state) {
-          return BlocListener<ProdukBloc, ProdukState>(
+          return BlocListener<KategoriProdukBloc, KategoriProdukState>(
             listener: (context, state) {
-              if (state is ProdukStateSuccess) {
-                context.read<ProdukBloc>().add(ProdukEventGetAll());
+              if (state is KategoriProdukStateSuccess) {
+                context
+                    .read<KategoriProdukBloc>()
+                    .add(KategoriProdukEventGetAll());
               }
 
-              if (state is ProdukStateError) {
+              if (state is KategoriProdukStateError) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(state.message)));
               }
             },
-            child: state is ProdukStateLoading
+            child: state is KategoriProdukStateLoading
                 ? const Center(child: CircularProgressIndicator())
-                : state is ProdukStateLoadedAll
+                : state is KategoriProdukStateLoadedAll
                     ? ListView.builder(
-                        itemCount: state.produks.length,
+                        itemCount: state.kategoriProduks.length,
                         itemBuilder: (context, index) {
-                          var produk = state.produks[index];
+                          var kategori = state.kategoriProduks[index];
                           return Card(
                             margin: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
                             elevation: 4,
                             child: ListTile(
                               contentPadding: const EdgeInsets.all(16),
-                              title: Text(produk.namaProduk,
+                              title: Text(kategori.namaKategori,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(produk.harga),
+                              subtitle: Text(kategori.deskripsi),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -181,13 +166,11 @@ class ProdukPages extends StatelessWidget {
                                         builder: (context) {
                                           final namaController =
                                               TextEditingController(
-                                                  text: produk.namaProduk);
-                                          final hargaController =
-                                              TextEditingController(
-                                                  text: produk.harga);
+                                                  text: kategori.namaKategori);
+
                                           final deskripsiController =
                                               TextEditingController(
-                                                  text: produk.deskripsi);
+                                                  text: kategori.deskripsi);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
@@ -198,17 +181,7 @@ class ProdukPages extends StatelessWidget {
                                                   controller: namaController,
                                                   decoration:
                                                       const InputDecoration(
-                                                    labelText: 'Nama Produk',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 16),
-                                                TextFormField(
-                                                  controller: hargaController,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'Harga Produk',
+                                                    labelText: 'Nama Kategori',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -220,7 +193,7 @@ class ProdukPages extends StatelessWidget {
                                                   decoration:
                                                       const InputDecoration(
                                                     labelText:
-                                                        'Deskripsi Produk',
+                                                        'Deskripsi Kategori',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -229,17 +202,15 @@ class ProdukPages extends StatelessWidget {
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
-                                                        .read<ProdukBloc>()
+                                                        .read<
+                                                            KategoriProdukBloc>()
                                                         .add(
-                                                          ProdukEventEdit(
-                                                            produkModel:
-                                                                ProdukModel(
-                                                              id: produk.id,
-                                                              namaProduk:
+                                                          KategoriProdukEventEdit(
+                                                            kategoriProdukModel:
+                                                                KategoriProdukModel(
+                                                              id: kategori.id,
+                                                              namaKategori:
                                                                   namaController
-                                                                      .text,
-                                                              harga:
-                                                                  hargaController
                                                                       .text,
                                                               deskripsi:
                                                                   deskripsiController
@@ -252,7 +223,7 @@ class ProdukPages extends StatelessWidget {
                                                   icon:
                                                       const Icon(Icons.update),
                                                   label: const Text(
-                                                      'Update Produk'),
+                                                      'Update Kategori'),
                                                 ),
                                               ],
                                             ),
@@ -264,8 +235,9 @@ class ProdukPages extends StatelessWidget {
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
-                                      context.read<ProdukBloc>().add(
-                                          ProdukEventDelete(id: produk.id));
+                                      context.read<KategoriProdukBloc>().add(
+                                          KategoriProdukEventDelete(
+                                              id: kategori.id));
                                     },
                                   ),
                                 ],

@@ -1,17 +1,17 @@
-import 'package:belajar_clean_arsitectur/features/produk/data/models/produk_model.dart';
-import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/kurir/data/models/kurir_model.dart';
+import 'package:belajar_clean_arsitectur/features/kurir/presentation/bloc/kurir_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class ProdukPages extends StatelessWidget {
-  const ProdukPages({super.key});
+class KurirPages extends StatelessWidget {
+  const KurirPages({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produk Pages'),
+        title: const Text('Kurir Pages'),
         actions: [
           IconButton(
             onPressed: () {
@@ -19,11 +19,15 @@ class ProdukPages extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
-                  TextEditingController namaProdukController =
+                  TextEditingController namaKurirController =
                       TextEditingController();
-                  TextEditingController hargaProdukController =
+                  TextEditingController nomorTlpKurirController =
                       TextEditingController();
-                  TextEditingController deskripsiProdukController =
+                  TextEditingController emailController =
+                      TextEditingController();
+                  TextEditingController kendaraanController =
+                      TextEditingController();
+                  TextEditingController statusController =
                       TextEditingController();
 
                   // Form Key untuk validasi
@@ -36,66 +40,97 @@ class ProdukPages extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Input Nama Produk
+                          // Input Nama Kurir
                           TextFormField(
-                            controller: namaProdukController,
+                            controller: namaKurirController,
                             decoration: const InputDecoration(
-                              labelText: 'Nama Produk',
+                              labelText: 'Nama Kurir',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Nama produk tidak boleh kosong';
+                                return 'Nama Kurir tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
 
-                          // Input Harga Produk
+                          // Input nomorTlp Kurir
                           TextFormField(
-                            controller: hargaProdukController,
+                            controller: nomorTlpKurirController,
                             decoration: const InputDecoration(
-                              labelText: 'Harga Produk',
+                              labelText: ' Nomor Telephone',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Harga produk tidak boleh kosong';
+                                return 'nomorTlp Kurir tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
 
-                          // Input Deskripsi Produk
+                          // Input email
                           TextFormField(
-                            controller: deskripsiProdukController,
+                            controller: emailController,
                             decoration: const InputDecoration(
-                              labelText: 'Deskripsi Produk',
+                              labelText: ' Email',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Deskripsi produk tidak boleh kosong';
+                                return 'Email tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
 
+                          // Input kendaraan
+                          TextFormField(
+                            controller: kendaraanController,
+                            decoration: const InputDecoration(
+                              labelText: 'Kendaraan',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Email tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Input status
+                          TextFormField(
+                            controller: statusController,
+                            decoration: const InputDecoration(
+                              labelText: 'Status',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Status tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
                           // Tombol Simpan dengan validasi
-                          BlocConsumer<ProdukBloc, ProdukState>(
+                          BlocConsumer<KurirBloc, KurirState>(
                             listener: (context, state) {
-                              if (state is ProdukStateError) {
+                              if (state is KurirStateError) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(state.message)));
                               }
-                              if (state is ProdukStateSuccess) {
+                              if (state is KurirStateSuccess) {
                                 context.pop();
                                 context
-                                    .read<ProdukBloc>()
-                                    .add(ProdukEventGetAll());
+                                    .read<KurirBloc>()
+                                    .add(KurirEventGetAll());
                               }
                             },
                             builder: (context, state) {
@@ -104,26 +139,28 @@ class ProdukPages extends StatelessWidget {
                                   if (formKey.currentState?.validate() ??
                                       false) {
                                     // Kirim event add jika form valid
-                                    context.read<ProdukBloc>().add(
-                                          ProdukEventAdd(
-                                            produkModel: ProdukModel(
+                                    context.read<KurirBloc>().add(
+                                          KurirEventAdd(
+                                            kurirModel: KurirModel(
                                               id: '',
-                                              namaProduk:
-                                                  namaProdukController.text,
-                                              harga: hargaProdukController.text,
-                                              deskripsi:
-                                                  deskripsiProdukController
-                                                      .text,
+                                              namaKurir:
+                                                  namaKurirController.text,
+                                              nomorTlp:
+                                                  nomorTlpKurirController.text,
+                                              email: emailController.text,
+                                              kendaraan:
+                                                  kendaraanController.text,
+                                              status: statusController.text,
                                             ),
                                           ),
                                         );
                                   }
                                 },
-                                icon: state is ProdukStateLoading
+                                icon: state is KurirStateLoading
                                     ? const CircularProgressIndicator(
                                         color: Colors.white)
                                     : const Icon(Icons.save),
-                                label: const Text('Simpan Produk'),
+                                label: const Text('Simpan Kurir'),
                               );
                             },
                           ),
@@ -138,37 +175,37 @@ class ProdukPages extends StatelessWidget {
           )
         ],
       ),
-      body: BlocBuilder<ProdukBloc, ProdukState>(
-        bloc: context.read<ProdukBloc>()..add(ProdukEventGetAll()),
+      body: BlocBuilder<KurirBloc, KurirState>(
+        bloc: context.read<KurirBloc>()..add(KurirEventGetAll()),
         builder: (context, state) {
-          return BlocListener<ProdukBloc, ProdukState>(
+          return BlocListener<KurirBloc, KurirState>(
             listener: (context, state) {
-              if (state is ProdukStateSuccess) {
-                context.read<ProdukBloc>().add(ProdukEventGetAll());
+              if (state is KurirStateSuccess) {
+                context.read<KurirBloc>().add(KurirEventGetAll());
               }
 
-              if (state is ProdukStateError) {
+              if (state is KurirStateError) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(state.message)));
               }
             },
-            child: state is ProdukStateLoading
+            child: state is KurirStateLoading
                 ? const Center(child: CircularProgressIndicator())
-                : state is ProdukStateLoadedAll
+                : state is KurirStateLoadedAll
                     ? ListView.builder(
-                        itemCount: state.produks.length,
+                        itemCount: state.kurirs.length,
                         itemBuilder: (context, index) {
-                          var produk = state.produks[index];
+                          var kurir = state.kurirs[index];
                           return Card(
                             margin: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
                             elevation: 4,
                             child: ListTile(
                               contentPadding: const EdgeInsets.all(16),
-                              title: Text(produk.namaProduk,
+                              title: Text(kurir.namaKurir,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(produk.harga),
+                              subtitle: Text(kurir.email),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -181,13 +218,19 @@ class ProdukPages extends StatelessWidget {
                                         builder: (context) {
                                           final namaController =
                                               TextEditingController(
-                                                  text: produk.namaProduk);
-                                          final hargaController =
+                                                  text: kurir.namaKurir);
+                                          final nomorTlpController =
                                               TextEditingController(
-                                                  text: produk.harga);
-                                          final deskripsiController =
+                                                  text: kurir.nomorTlp);
+                                          final emailController =
                                               TextEditingController(
-                                                  text: produk.deskripsi);
+                                                  text: kurir.email);
+                                          final kendaraanController =
+                                              TextEditingController(
+                                                  text: kurir.kendaraan);
+                                          final statusController =
+                                              TextEditingController(
+                                                  text: kurir.status);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
@@ -198,17 +241,7 @@ class ProdukPages extends StatelessWidget {
                                                   controller: namaController,
                                                   decoration:
                                                       const InputDecoration(
-                                                    labelText: 'Nama Produk',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 16),
-                                                TextFormField(
-                                                  controller: hargaController,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'Harga Produk',
+                                                    labelText: 'Nama Kurir',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -216,11 +249,42 @@ class ProdukPages extends StatelessWidget {
                                                 const SizedBox(height: 16),
                                                 TextFormField(
                                                   controller:
-                                                      deskripsiController,
+                                                      nomorTlpController,
                                                   decoration:
                                                       const InputDecoration(
                                                     labelText:
-                                                        'Deskripsi Produk',
+                                                        'Nomor telephone',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                TextFormField(
+                                                  controller: emailController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Email',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                TextFormField(
+                                                  controller:
+                                                      kendaraanController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Kendaraan',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                TextFormField(
+                                                  controller: statusController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'status',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -229,20 +293,26 @@ class ProdukPages extends StatelessWidget {
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
-                                                        .read<ProdukBloc>()
+                                                        .read<KurirBloc>()
                                                         .add(
-                                                          ProdukEventEdit(
-                                                            produkModel:
-                                                                ProdukModel(
-                                                              id: produk.id,
-                                                              namaProduk:
+                                                          KurirEventEdit(
+                                                            kurirModel:
+                                                                KurirModel(
+                                                              id: kurir.id,
+                                                              namaKurir:
                                                                   namaController
                                                                       .text,
-                                                              harga:
-                                                                  hargaController
+                                                              nomorTlp:
+                                                                  nomorTlpController
                                                                       .text,
-                                                              deskripsi:
-                                                                  deskripsiController
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              kendaraan:
+                                                                  kendaraanController
+                                                                      .text,
+                                                              status:
+                                                                  statusController
                                                                       .text,
                                                             ),
                                                           ),
@@ -252,7 +322,7 @@ class ProdukPages extends StatelessWidget {
                                                   icon:
                                                       const Icon(Icons.update),
                                                   label: const Text(
-                                                      'Update Produk'),
+                                                      'Update Kurir'),
                                                 ),
                                               ],
                                             ),
@@ -264,8 +334,9 @@ class ProdukPages extends StatelessWidget {
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
-                                      context.read<ProdukBloc>().add(
-                                          ProdukEventDelete(id: produk.id));
+                                      context
+                                          .read<KurirBloc>()
+                                          .add(KurirEventDelete(id: kurir.id));
                                     },
                                   ),
                                 ],

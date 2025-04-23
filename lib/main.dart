@@ -1,5 +1,10 @@
 import 'package:belajar_clean_arsitectur/core/routes/routes.dart';
+import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/kurir/presentation/bloc/kurir_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/suplier/presentation/bloc/suplier_bloc.dart';
 import 'package:belajar_clean_arsitectur/firebase_options.dart';
 import 'package:belajar_clean_arsitectur/my_injection.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +34,46 @@ class MyApp extends StatelessWidget {
               produkUsecasesEditProduk: myinjection(),
               produkUsecasesGetAll: myinjection(),
               produkUsecasesGetById: myinjection()),
+        ),
+        BlocProvider<KategoriProdukBloc>(
+          create: (context) => KategoriProdukBloc(
+              kategoriProdukUsecaseAdd: myinjection(),
+              kategoriProdukUsecaseEdit: myinjection(),
+              kategoriProdukUsecaseDelete: myinjection(),
+              kategoriProdukUsecaseGetAll: myinjection(),
+              kategoriProdukUsecaseGetById: myinjection()),
+        ),
+        BlocProvider<JenisProdukBloc>(
+          create: (context) => JenisProdukBloc(
+              jenisUsecaseAddJenis: myinjection(),
+              jenisUsecaseEditJenis: myinjection(),
+              jenisUsecaseDeleteJenis: myinjection(),
+              jenisUsecaseGetAll: myinjection(),
+              jenisUsecaseGetById: myinjection()),
+        ),
+        BlocProvider<SuplierBloc>(
+          create: (context) => SuplierBloc(
+              suplierUsecaseAdd: myinjection(),
+              suplierUsecaseEdit: myinjection(),
+              suplierUsecaseDelete: myinjection(),
+              suplierUsecaseGetAll: myinjection(),
+              suplierUsecaseGetById: myinjection()),
+        ),
+        BlocProvider<GudangBloc>(
+          create: (context) => GudangBloc(
+              gudangUsecaseAdd: myinjection(),
+              gudangUsecaseEdit: myinjection(),
+              gudangUsecaseDelete: myinjection(),
+              gudangUsecaseGetAll: myinjection(),
+              gudangUsecaseGetById: myinjection()),
+        ),
+        BlocProvider<KurirBloc>(
+          create: (context) => KurirBloc(
+              kurirUsecaseAdd: myinjection(),
+              kurirUsecaseEdit: myinjection(),
+              kurirUsecaseDelete: myinjection(),
+              kurirUsecaseGetAll: myinjection(),
+              kurirUsecaseGetById: myinjection()),
         ),
       ],
       child: MaterialApp.router(

@@ -1,17 +1,17 @@
-import 'package:belajar_clean_arsitectur/features/produk/data/models/produk_model.dart';
-import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/gudang/data/models/gudang_model.dart';
+import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class ProdukPages extends StatelessWidget {
-  const ProdukPages({super.key});
+class GudangPages extends StatelessWidget {
+  const GudangPages({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produk Pages'),
+        title: const Text('Gudang Pages'),
         actions: [
           IconButton(
             onPressed: () {
@@ -19,11 +19,11 @@ class ProdukPages extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (context) {
-                  TextEditingController namaProdukController =
+                  TextEditingController namaGudangController =
                       TextEditingController();
-                  TextEditingController hargaProdukController =
+                  TextEditingController alamatGudangController =
                       TextEditingController();
-                  TextEditingController deskripsiProdukController =
+                  TextEditingController nomorTlpGudangController =
                       TextEditingController();
 
                   // Form Key untuk validasi
@@ -36,66 +36,64 @@ class ProdukPages extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Input Nama Produk
+                          // Input Nama Gudang
                           TextFormField(
-                            controller: namaProdukController,
+                            controller: namaGudangController,
                             decoration: const InputDecoration(
-                              labelText: 'Nama Produk',
+                              labelText: 'Nama Gudang',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Nama produk tidak boleh kosong';
+                                return 'Nama Gudang tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
-
-                          // Input Harga Produk
+                          // Input Alamat
                           TextFormField(
-                            controller: hargaProdukController,
+                            controller: alamatGudangController,
                             decoration: const InputDecoration(
-                              labelText: 'Harga Produk',
+                              labelText: ' Alamat',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Harga produk tidak boleh kosong';
+                                return 'alamat Gudang tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 16),
-
-                          // Input Deskripsi Produk
+                          // Input nomorTlp Gudang
                           TextFormField(
-                            controller: deskripsiProdukController,
+                            controller: nomorTlpGudangController,
                             decoration: const InputDecoration(
-                              labelText: 'Deskripsi Produk',
+                              labelText: ' Nomor Telephone',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Deskripsi produk tidak boleh kosong';
+                                return 'nomorTlp Gudang tidak boleh kosong';
                               }
                               return null;
                             },
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 16),
 
                           // Tombol Simpan dengan validasi
-                          BlocConsumer<ProdukBloc, ProdukState>(
+                          BlocConsumer<GudangBloc, GudangState>(
                             listener: (context, state) {
-                              if (state is ProdukStateError) {
+                              if (state is GudangStateError) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(state.message)));
                               }
-                              if (state is ProdukStateSuccess) {
+                              if (state is GudangStateSuccess) {
                                 context.pop();
                                 context
-                                    .read<ProdukBloc>()
-                                    .add(ProdukEventGetAll());
+                                    .read<GudangBloc>()
+                                    .add(GudangEventGetAll());
                               }
                             },
                             builder: (context, state) {
@@ -104,26 +102,26 @@ class ProdukPages extends StatelessWidget {
                                   if (formKey.currentState?.validate() ??
                                       false) {
                                     // Kirim event add jika form valid
-                                    context.read<ProdukBloc>().add(
-                                          ProdukEventAdd(
-                                            produkModel: ProdukModel(
+                                    context.read<GudangBloc>().add(
+                                          GudangEventAdd(
+                                            gudangModel: GudangModel(
                                               id: '',
-                                              namaProduk:
-                                                  namaProdukController.text,
-                                              harga: hargaProdukController.text,
-                                              deskripsi:
-                                                  deskripsiProdukController
-                                                      .text,
+                                              namaGudang:
+                                                  namaGudangController.text,
+                                              alamat:
+                                                  alamatGudangController.text,
+                                              nomorTlp:
+                                                  nomorTlpGudangController.text,
                                             ),
                                           ),
                                         );
                                   }
                                 },
-                                icon: state is ProdukStateLoading
+                                icon: state is GudangStateLoading
                                     ? const CircularProgressIndicator(
                                         color: Colors.white)
                                     : const Icon(Icons.save),
-                                label: const Text('Simpan Produk'),
+                                label: const Text('Simpan Gudang'),
                               );
                             },
                           ),
@@ -138,37 +136,37 @@ class ProdukPages extends StatelessWidget {
           )
         ],
       ),
-      body: BlocBuilder<ProdukBloc, ProdukState>(
-        bloc: context.read<ProdukBloc>()..add(ProdukEventGetAll()),
+      body: BlocBuilder<GudangBloc, GudangState>(
+        bloc: context.read<GudangBloc>()..add(GudangEventGetAll()),
         builder: (context, state) {
-          return BlocListener<ProdukBloc, ProdukState>(
+          return BlocListener<GudangBloc, GudangState>(
             listener: (context, state) {
-              if (state is ProdukStateSuccess) {
-                context.read<ProdukBloc>().add(ProdukEventGetAll());
+              if (state is GudangStateSuccess) {
+                context.read<GudangBloc>().add(GudangEventGetAll());
               }
 
-              if (state is ProdukStateError) {
+              if (state is GudangStateError) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(state.message)));
               }
             },
-            child: state is ProdukStateLoading
+            child: state is GudangStateLoading
                 ? const Center(child: CircularProgressIndicator())
-                : state is ProdukStateLoadedAll
+                : state is GudangStateLoadedAll
                     ? ListView.builder(
-                        itemCount: state.produks.length,
+                        itemCount: state.gudangs.length,
                         itemBuilder: (context, index) {
-                          var produk = state.produks[index];
+                          var gudang = state.gudangs[index];
                           return Card(
                             margin: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
                             elevation: 4,
                             child: ListTile(
                               contentPadding: const EdgeInsets.all(16),
-                              title: Text(produk.namaProduk,
+                              title: Text(gudang.namaGudang,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(produk.harga),
+                              subtitle: Text(gudang.alamat),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -181,13 +179,13 @@ class ProdukPages extends StatelessWidget {
                                         builder: (context) {
                                           final namaController =
                                               TextEditingController(
-                                                  text: produk.namaProduk);
-                                          final hargaController =
+                                                  text: gudang.namaGudang);
+                                          final alamatController =
                                               TextEditingController(
-                                                  text: produk.harga);
-                                          final deskripsiController =
+                                                  text: gudang.alamat);
+                                          final nomorTlpController =
                                               TextEditingController(
-                                                  text: produk.deskripsi);
+                                                  text: gudang.nomorTlp);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
@@ -198,17 +196,17 @@ class ProdukPages extends StatelessWidget {
                                                   controller: namaController,
                                                   decoration:
                                                       const InputDecoration(
-                                                    labelText: 'Nama Produk',
+                                                    labelText: 'Nama Gudang',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
                                                 TextFormField(
-                                                  controller: hargaController,
+                                                  controller: alamatController,
                                                   decoration:
                                                       const InputDecoration(
-                                                    labelText: 'Harga Produk',
+                                                    labelText: 'Alamat',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -216,11 +214,11 @@ class ProdukPages extends StatelessWidget {
                                                 const SizedBox(height: 16),
                                                 TextFormField(
                                                   controller:
-                                                      deskripsiController,
+                                                      nomorTlpController,
                                                   decoration:
                                                       const InputDecoration(
                                                     labelText:
-                                                        'Deskripsi Produk',
+                                                        'Nomor telephone',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -229,20 +227,20 @@ class ProdukPages extends StatelessWidget {
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
-                                                        .read<ProdukBloc>()
+                                                        .read<GudangBloc>()
                                                         .add(
-                                                          ProdukEventEdit(
-                                                            produkModel:
-                                                                ProdukModel(
-                                                              id: produk.id,
-                                                              namaProduk:
+                                                          GudangEventEdit(
+                                                            gudangModel:
+                                                                GudangModel(
+                                                              id: gudang.id,
+                                                              namaGudang:
                                                                   namaController
                                                                       .text,
-                                                              harga:
-                                                                  hargaController
+                                                              alamat:
+                                                                  alamatController
                                                                       .text,
-                                                              deskripsi:
-                                                                  deskripsiController
+                                                              nomorTlp:
+                                                                  nomorTlpController
                                                                       .text,
                                                             ),
                                                           ),
@@ -252,7 +250,7 @@ class ProdukPages extends StatelessWidget {
                                                   icon:
                                                       const Icon(Icons.update),
                                                   label: const Text(
-                                                      'Update Produk'),
+                                                      'Update Gudang'),
                                                 ),
                                               ],
                                             ),
@@ -264,8 +262,8 @@ class ProdukPages extends StatelessWidget {
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
-                                      context.read<ProdukBloc>().add(
-                                          ProdukEventDelete(id: produk.id));
+                                      context.read<GudangBloc>().add(
+                                          GudangEventDelete(id: gudang.id));
                                     },
                                   ),
                                 ],
