@@ -7,6 +7,7 @@ class SuplierModel extends Suplier {
   const SuplierModel({
     required super.id,
     required super.namaSuplier,
+    required super.alamat,
     required super.nomorTlp,
     super.createdAt,
     super.updatedAt,
@@ -19,6 +20,7 @@ class SuplierModel extends Suplier {
     return SuplierModel(
       id: doc.id,
       namaSuplier: data['namaSuplier'] ?? '',
+      alamat: data['alamat'] ?? '',
       nomorTlp: data['nomorTlp'] ?? '',
       createdAt: data['createdAt'] != null
           ? (data['createdAt'] as Timestamp).toDate()
@@ -33,6 +35,7 @@ class SuplierModel extends Suplier {
   Map<String, dynamic> toFireStore() {
     return {
       'namaSuplier': namaSuplier,
+      'alamat': alamat,
       'nomorTlp': nomorTlp,
       'createdAt': isNew
           ? FieldValue.serverTimestamp()

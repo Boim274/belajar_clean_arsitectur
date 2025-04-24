@@ -1,6 +1,7 @@
 import 'package:belajar_clean_arsitectur/features/suplier/data/models/suplier_model.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/bloc/suplier_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,10 @@ class SuplierPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Suplier Pages'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -20,6 +25,8 @@ class SuplierPages extends StatelessWidget {
                 isScrollControlled: true,
                 builder: (context) {
                   TextEditingController namaSuplierController =
+                      TextEditingController();
+                  TextEditingController alamatController =
                       TextEditingController();
                   TextEditingController nomorTlpSuplierController =
                       TextEditingController();
@@ -50,6 +57,22 @@ class SuplierPages extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
 
+                          // Input Alamat
+                          TextFormField(
+                            controller: alamatController,
+                            decoration: const InputDecoration(
+                              labelText: 'Alamat',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Alamat tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+
                           // Input nomorTlp Suplier
                           TextFormField(
                             controller: nomorTlpSuplierController,
@@ -57,6 +80,11 @@ class SuplierPages extends StatelessWidget {
                               labelText: ' Nomor Telephone',
                               border: OutlineInputBorder(),
                             ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // hanya angka
+                            ],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'nomorTlp Suplier tidak boleh kosong';
@@ -92,6 +120,7 @@ class SuplierPages extends StatelessWidget {
                                               id: '',
                                               namaSuplier:
                                                   namaSuplierController.text,
+                                              alamat: alamatController.text,
                                               nomorTlp:
                                                   nomorTlpSuplierController
                                                       .text,
@@ -149,7 +178,7 @@ class SuplierPages extends StatelessWidget {
                               title: Text(suplier.namaSuplier,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(suplier.nomorTlp),
+                              subtitle: Text('Alamat: ${suplier.alamat}'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -163,6 +192,9 @@ class SuplierPages extends StatelessWidget {
                                           final namaController =
                                               TextEditingController(
                                                   text: suplier.namaSuplier);
+                                          final alamatController =
+                                              TextEditingController(
+                                                  text: suplier.alamat);
                                           final nomorTlpController =
                                               TextEditingController(
                                                   text: suplier.nomorTlp);
@@ -183,6 +215,16 @@ class SuplierPages extends StatelessWidget {
                                                 ),
                                                 const SizedBox(height: 16),
                                                 TextFormField(
+                                                  controller: alamatController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Alamat',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
+                                                TextFormField(
                                                   controller:
                                                       nomorTlpController,
                                                   decoration:
@@ -192,6 +234,12 @@ class SuplierPages extends StatelessWidget {
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly, // hanya angka
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 20),
                                                 ElevatedButton.icon(
@@ -205,6 +253,9 @@ class SuplierPages extends StatelessWidget {
                                                               id: suplier.id,
                                                               namaSuplier:
                                                                   namaController
+                                                                      .text,
+                                                              alamat:
+                                                                  alamatController
                                                                       .text,
                                                               nomorTlp:
                                                                   nomorTlpController

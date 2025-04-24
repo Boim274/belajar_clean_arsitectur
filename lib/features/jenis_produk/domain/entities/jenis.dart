@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/src/material/dropdown.dart';
 
 class Jenis extends Equatable {
   final String id;
@@ -15,4 +16,6 @@ class Jenis extends Equatable {
       this.updatedAt});
   @override
   List<Object?> get props => [id, namaJenis, deskripsi, createdAt, updatedAt];
+
+  map(DropdownMenuItem<String> Function(dynamic jenis) param0) {}
 }

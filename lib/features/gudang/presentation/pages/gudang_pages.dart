@@ -1,6 +1,7 @@
 import 'package:belajar_clean_arsitectur/features/gudang/data/models/gudang_model.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,10 @@ class GudangPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gudang Pages'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -24,6 +29,8 @@ class GudangPages extends StatelessWidget {
                   TextEditingController alamatGudangController =
                       TextEditingController();
                   TextEditingController nomorTlpGudangController =
+                      TextEditingController();
+                  TextEditingController kapasitasGudangController =
                       TextEditingController();
 
                   // Form Key untuk validasi
@@ -55,12 +62,12 @@ class GudangPages extends StatelessWidget {
                           TextFormField(
                             controller: alamatGudangController,
                             decoration: const InputDecoration(
-                              labelText: ' Alamat',
+                              labelText: 'Alamat',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'alamat Gudang tidak boleh kosong';
+                                return 'Alamat Gudang tidak boleh kosong';
                               }
                               return null;
                             },
@@ -70,12 +77,32 @@ class GudangPages extends StatelessWidget {
                           TextFormField(
                             controller: nomorTlpGudangController,
                             decoration: const InputDecoration(
-                              labelText: ' Nomor Telephone',
+                              labelText: 'Nomor Telephone',
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // hanya angka
+                            ],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'nomorTlp Gudang tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          // Input Kapasitas
+                          TextFormField(
+                            controller: kapasitasGudangController,
+                            decoration: const InputDecoration(
+                              labelText: 'Kapasistas',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'nomorTlp Gudang tidak boleh kosong';
+                                return 'Kapasitas Gudang tidak boleh kosong';
                               }
                               return null;
                             },
@@ -112,6 +139,9 @@ class GudangPages extends StatelessWidget {
                                                   alamatGudangController.text,
                                               nomorTlp:
                                                   nomorTlpGudangController.text,
+                                              kapasitas:
+                                                  kapasitasGudangController
+                                                      .text,
                                             ),
                                           ),
                                         );
@@ -166,7 +196,7 @@ class GudangPages extends StatelessWidget {
                               title: Text(gudang.namaGudang,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(gudang.alamat),
+                              subtitle: Text('Alamat: ${gudang.alamat}'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -186,6 +216,9 @@ class GudangPages extends StatelessWidget {
                                           final nomorTlpController =
                                               TextEditingController(
                                                   text: gudang.nomorTlp);
+                                          final kapasitasController =
+                                              TextEditingController(
+                                                  text: gudang.kapasitas);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
@@ -222,8 +255,25 @@ class GudangPages extends StatelessWidget {
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly, // hanya angka
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 20),
+                                                TextFormField(
+                                                  controller:
+                                                      kapasitasController,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Kapasistas',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
@@ -241,6 +291,9 @@ class GudangPages extends StatelessWidget {
                                                                       .text,
                                                               nomorTlp:
                                                                   nomorTlpController
+                                                                      .text,
+                                                              kapasitas:
+                                                                  kapasitasController
                                                                       .text,
                                                             ),
                                                           ),

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/src/material/dropdown.dart';
 
 class KategoriProduk extends Equatable {
   final String id;
@@ -10,4 +11,6 @@ class KategoriProduk extends Equatable {
 
   @override
   List<Object?> get props => [id, namaKategori, deskripsi];
+
+  map(DropdownMenuItem<String> Function(dynamic kategori) param0) {}
 }

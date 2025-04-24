@@ -1,6 +1,7 @@
 import 'package:belajar_clean_arsitectur/features/kurir/data/models/kurir_model.dart';
 import 'package:belajar_clean_arsitectur/features/kurir/presentation/bloc/kurir_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,10 @@ class KurirPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kurir Pages'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -25,9 +30,7 @@ class KurirPages extends StatelessWidget {
                       TextEditingController();
                   TextEditingController emailController =
                       TextEditingController();
-                  TextEditingController kendaraanController =
-                      TextEditingController();
-                  TextEditingController statusController =
+                  TextEditingController layananController =
                       TextEditingController();
 
                   // Form Key untuk validasi
@@ -63,6 +66,11 @@ class KurirPages extends StatelessWidget {
                               labelText: ' Nomor Telephone',
                               border: OutlineInputBorder(),
                             ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // hanya angka
+                            ],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'nomorTlp Kurir tidak boleh kosong';
@@ -88,11 +96,11 @@ class KurirPages extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
 
-                          // Input kendaraan
+                          // Input layanan
                           TextFormField(
-                            controller: kendaraanController,
+                            controller: layananController,
                             decoration: const InputDecoration(
-                              labelText: 'Kendaraan',
+                              labelText: 'Layanan',
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
@@ -104,21 +112,6 @@ class KurirPages extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
 
-                          // Input status
-                          TextFormField(
-                            controller: statusController,
-                            decoration: const InputDecoration(
-                              labelText: 'Status',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Status tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
                           // Tombol Simpan dengan validasi
                           BlocConsumer<KurirBloc, KurirState>(
                             listener: (context, state) {
@@ -148,9 +141,7 @@ class KurirPages extends StatelessWidget {
                                               nomorTlp:
                                                   nomorTlpKurirController.text,
                                               email: emailController.text,
-                                              kendaraan:
-                                                  kendaraanController.text,
-                                              status: statusController.text,
+                                              layanan: layananController.text,
                                             ),
                                           ),
                                         );
@@ -205,7 +196,7 @@ class KurirPages extends StatelessWidget {
                               title: Text(kurir.namaKurir,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(kurir.email),
+                              subtitle: Text('Layanan: ${kurir.layanan}'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -225,12 +216,9 @@ class KurirPages extends StatelessWidget {
                                           final emailController =
                                               TextEditingController(
                                                   text: kurir.email);
-                                          final kendaraanController =
+                                          final layananController =
                                               TextEditingController(
-                                                  text: kurir.kendaraan);
-                                          final statusController =
-                                              TextEditingController(
-                                                  text: kurir.status);
+                                                  text: kurir.layanan);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
@@ -257,6 +245,12 @@ class KurirPages extends StatelessWidget {
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly, // hanya angka
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 20),
                                                 TextFormField(
@@ -270,21 +264,10 @@ class KurirPages extends StatelessWidget {
                                                 ),
                                                 const SizedBox(height: 20),
                                                 TextFormField(
-                                                  controller:
-                                                      kendaraanController,
+                                                  controller: layananController,
                                                   decoration:
                                                       const InputDecoration(
-                                                    labelText: 'Kendaraan',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 20),
-                                                TextFormField(
-                                                  controller: statusController,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'status',
+                                                    labelText: 'Layanan',
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
@@ -308,11 +291,8 @@ class KurirPages extends StatelessWidget {
                                                               email:
                                                                   emailController
                                                                       .text,
-                                                              kendaraan:
-                                                                  kendaraanController
-                                                                      .text,
-                                                              status:
-                                                                  statusController
+                                                              layanan:
+                                                                  layananController
                                                                       .text,
                                                             ),
                                                           ),

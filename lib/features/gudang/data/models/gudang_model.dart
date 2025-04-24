@@ -6,9 +6,11 @@ class GudangModel extends Gudang {
 
   const GudangModel({
     required super.id,
+    super.suplierId,
     required super.namaGudang,
     required super.alamat,
     required super.nomorTlp,
+    required super.kapasitas,
     super.createdAt,
     super.updatedAt,
     this.isNew = false,
@@ -19,9 +21,11 @@ class GudangModel extends Gudang {
 
     return GudangModel(
       id: doc.id,
+      suplierId: data['suplierId'] ?? '',
       namaGudang: data['namaGudang'] ?? '',
       alamat: data['alamat'] ?? '',
       nomorTlp: data['nomorTlp'] ?? '',
+      kapasitas: data['kapasitas'] ?? '',
       createdAt: data['createdAt'] != null
           ? (data['createdAt'] as Timestamp).toDate()
           : null,
@@ -34,9 +38,11 @@ class GudangModel extends Gudang {
 
   Map<String, dynamic> toFireStore() {
     return {
+      'suplierId': suplierId,
       'namaGudang': namaGudang,
       'alamat': alamat,
       'nomorTlp': nomorTlp,
+      'kapasitas': kapasitas,
       'createdAt': isNew
           ? FieldValue.serverTimestamp()
           : (createdAt != null

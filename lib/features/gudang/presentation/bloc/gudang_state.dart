@@ -35,7 +35,7 @@ class GudangStateLoaded extends GudangState {
   GudangStateLoaded({required this.gudang});
 
   @override
-  List<Object?> get props => [Gudang];
+  List<Object?> get props => [gudang];
 }
 
 class GudangStateSuccess extends GudangState {

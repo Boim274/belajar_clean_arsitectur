@@ -5,8 +5,8 @@ class Kurir extends Equatable {
   final String namaKurir;
   final String nomorTlp;
   final String email;
-  final String kendaraan; // Motor, Mobil, Sepeda, dll
-  final String status; // Aktif, Tidak Aktif, dll
+  final String layanan;
+  final String? gudangId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -15,20 +15,12 @@ class Kurir extends Equatable {
       required this.namaKurir,
       required this.nomorTlp,
       required this.email,
-      required this.kendaraan,
-      required this.status,
+      required this.layanan,
+      this.gudangId,
       this.createdAt,
       this.updatedAt});
 
   @override
-  List<Object?> get props => [
-        id,
-        namaKurir,
-        nomorTlp,
-        email,
-        kendaraan,
-        status,
-        createdAt,
-        updatedAt
-      ];
+  List<Object?> get props =>
+      [id, namaKurir, nomorTlp, email, layanan, gudangId, createdAt, updatedAt];
 }

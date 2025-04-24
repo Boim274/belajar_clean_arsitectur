@@ -1,6 +1,10 @@
+import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/produk/data/models/produk_model.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,7 +15,11 @@ class ProdukPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Produk Pages'),
+        title: const Text('Produk'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -25,7 +33,9 @@ class ProdukPages extends StatelessWidget {
                       TextEditingController();
                   TextEditingController deskripsiProdukController =
                       TextEditingController();
-
+                  String? selectedValueCategoryId;
+                  String? selectedValueJenisId;
+                  String? selectedValueGudangId;
                   // Form Key untuk validasi
                   final formKey = GlobalKey<FormState>();
 
@@ -59,6 +69,11 @@ class ProdukPages extends StatelessWidget {
                               labelText: 'Harga Produk',
                               border: OutlineInputBorder(),
                             ),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // hanya angka
+                            ],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Harga produk tidak boleh kosong';
@@ -80,6 +95,122 @@ class ProdukPages extends StatelessWidget {
                                 return 'Deskripsi produk tidak boleh kosong';
                               }
                               return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Dropdown Kategori produk
+                          BlocBuilder<KategoriProdukBloc, KategoriProdukState>(
+                            bloc: context.read<KategoriProdukBloc>()
+                              ..add(KategoriProdukEventGetAll()),
+                            builder: (context, state) {
+                              if (state is KategoriProdukStateError) {
+                                return Text(state.message);
+                              }
+                              if (state is KategoriProdukStateLoadedAll) {
+                                final kategori = state.kategoriProduks;
+
+                                return DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Kategori',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: selectedValueCategoryId,
+                                  items: kategori
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(e.namaKategori)),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    selectedValueCategoryId = value;
+                                  },
+                                  // validasi
+                                  validator: (value) => value == null
+                                      ? 'Kategori wajib dipilih'
+                                      : null,
+                                );
+                              }
+                              // Saat loading
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Dropdown jenis produk
+                          BlocBuilder<JenisProdukBloc, JenisProdukState>(
+                            bloc: context.read<JenisProdukBloc>()
+                              ..add(JenisEventGetAll()),
+                            builder: (context, state) {
+                              if (state is JenisProdukStateError) {
+                                return Text(state.message);
+                              }
+                              if (state is JenisProdukStateLoadedAll) {
+                                final jenis = state.jenis;
+
+                                return DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Jenis',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: selectedValueCategoryId,
+                                  items: jenis
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(e.namaJenis)),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    selectedValueJenisId = value;
+                                  },
+                                  // validasi
+                                  validator: (value) => value == null
+                                      ? 'Jenis wajib dipilih'
+                                      : null,
+                                );
+                              }
+                              // Saat loading
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Dropdown gudang
+                          BlocBuilder<GudangBloc, GudangState>(
+                            bloc: context.read<GudangBloc>()
+                              ..add(GudangEventGetAll()),
+                            builder: (context, state) {
+                              if (state is GudangStateError) {
+                                return Text(state.message);
+                              }
+                              if (state is GudangStateLoadedAll) {
+                                final gudang = state.gudangs;
+                                return DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Gudang',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: selectedValueCategoryId,
+                                  items: gudang
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(e.namaGudang)),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    selectedValueGudangId = value;
+                                  },
+                                  // validasi
+                                  validator: (value) => value == null
+                                      ? 'Gudang wajib dipilih'
+                                      : null,
+                                );
+                              }
+                              // Saat loading
+                              return const CircularProgressIndicator();
                             },
                           ),
                           const SizedBox(height: 20),
@@ -108,6 +239,10 @@ class ProdukPages extends StatelessWidget {
                                           ProdukEventAdd(
                                             produkModel: ProdukModel(
                                               id: '',
+                                              kategoriId:
+                                                  selectedValueCategoryId,
+                                              jenisId: selectedValueJenisId,
+                                              gudangId: selectedValueGudangId,
                                               namaProduk:
                                                   namaProdukController.text,
                                               harga: hargaProdukController.text,
@@ -168,7 +303,7 @@ class ProdukPages extends StatelessWidget {
                               title: Text(produk.namaProduk,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
-                              subtitle: Text(produk.harga),
+                              subtitle: Text('Rp ${produk.harga}'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -188,12 +323,29 @@ class ProdukPages extends StatelessWidget {
                                           final deskripsiController =
                                               TextEditingController(
                                                   text: produk.deskripsi);
+                                          String? selectedValueKategoryId =
+                                              produk.kategoriId;
+                                          String? selectedValueJenisId =
+                                              produk.jenisId;
+                                          String? selectedValueGudangId =
+                                              produk.gudangId;
+                                          // penmbahan context agar bbisa terbaca
+                                          context
+                                              .read<KategoriProdukBloc>()
+                                              .add(KategoriProdukEventGetAll());
+                                          context
+                                              .read<JenisProdukBloc>()
+                                              .add(JenisEventGetAll());
+                                          context
+                                              .read<GudangBloc>()
+                                              .add(GudangEventGetAll());
 
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
+                                                // nama produk
                                                 TextFormField(
                                                   controller: namaController,
                                                   decoration:
@@ -204,6 +356,8 @@ class ProdukPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
+
+                                                // harga produk
                                                 TextFormField(
                                                   controller: hargaController,
                                                   decoration:
@@ -212,8 +366,16 @@ class ProdukPages extends StatelessWidget {
                                                     border:
                                                         OutlineInputBorder(),
                                                   ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly, // hanya angka
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 16),
+
+                                                // deskripsi
                                                 TextFormField(
                                                   controller:
                                                       deskripsiController,
@@ -226,6 +388,154 @@ class ProdukPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 20),
+
+                                                // dropdown Kategori produk
+                                                BlocBuilder<KategoriProdukBloc,
+                                                    KategoriProdukState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is KategoriProdukStateError) {
+                                                      return Text(
+                                                          state.message);
+                                                    }
+
+                                                    if (state
+                                                        is KategoriProdukStateLoadedAll) {
+                                                      final kategori =
+                                                          state.kategoriProduks;
+
+                                                      return DropdownButtonFormField<
+                                                          String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Kategori',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        value:
+                                                            selectedValueKategoryId, // nilai awal diisi untuk edit
+                                                        items:
+                                                            kategori.map((e) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: e.id,
+                                                            child: Text(
+                                                                e.namaKategori),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {
+                                                          selectedValueKategoryId =
+                                                              value;
+                                                        },
+                                                        validator: (value) =>
+                                                            value == null
+                                                                ? 'Kategori wajib dipilih'
+                                                                : null,
+                                                      );
+                                                    }
+
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+
+                                                // dropdown jenis produk
+                                                BlocBuilder<JenisProdukBloc,
+                                                    JenisProdukState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is JenisProdukStateError) {
+                                                      return Text(
+                                                          state.message);
+                                                    }
+
+                                                    if (state
+                                                        is JenisProdukStateLoadedAll) {
+                                                      final jenis = state.jenis;
+
+                                                      return DropdownButtonFormField<
+                                                          String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Jenis',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        value:
+                                                            selectedValueJenisId, // nilai awal diisi untuk edit
+                                                        items: jenis.map((e) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: e.id,
+                                                            child: Text(
+                                                                e.namaJenis),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {
+                                                          selectedValueJenisId =
+                                                              value;
+                                                        },
+                                                        validator: (value) =>
+                                                            value == null
+                                                                ? 'Jenis wajib dipilih'
+                                                                : null,
+                                                      );
+                                                    }
+
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+
+                                                // dropdown gudang
+                                                BlocBuilder<GudangBloc,
+                                                    GudangState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is GudangStateError) {
+                                                      return Text(
+                                                          state.message);
+                                                    }
+
+                                                    if (state
+                                                        is GudangStateLoadedAll) {
+                                                      final gudang =
+                                                          state.gudangs;
+
+                                                      return DropdownButtonFormField<
+                                                          String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Gudang',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        value:
+                                                            selectedValueGudangId, // nilai awal diisi untuk edit
+                                                        items: gudang.map((e) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: e.id,
+                                                            child: Text(
+                                                                e.namaGudang),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {
+                                                          selectedValueGudangId =
+                                                              value;
+                                                        },
+                                                        validator: (value) =>
+                                                            value == null
+                                                                ? 'Gudang wajib dipilih'
+                                                                : null,
+                                                      );
+                                                    }
+
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
@@ -235,6 +545,12 @@ class ProdukPages extends StatelessWidget {
                                                             produkModel:
                                                                 ProdukModel(
                                                               id: produk.id,
+                                                              kategoriId:
+                                                                  selectedValueKategoryId,
+                                                              jenisId:
+                                                                  selectedValueJenisId,
+                                                              gudangId:
+                                                                  selectedValueGudangId,
                                                               namaProduk:
                                                                   namaController
                                                                       .text,

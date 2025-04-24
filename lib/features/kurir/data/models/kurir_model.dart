@@ -9,8 +9,8 @@ class KurirModel extends Kurir {
     required super.namaKurir,
     required super.nomorTlp,
     required super.email,
-    required super.kendaraan,
-    required super.status,
+    required super.layanan,
+    super.gudangId,
     super.createdAt,
     super.updatedAt,
     this.isNew = false,
@@ -24,8 +24,8 @@ class KurirModel extends Kurir {
       namaKurir: data['namaKurir'] ?? '',
       nomorTlp: data['nomorTlp'] ?? '',
       email: data['email'] ?? '',
-      kendaraan: data['kendaraan'] ?? '',
-      status: data['status'] ?? '',
+      layanan: data['layanan'] ?? '',
+      gudangId: data['gudangId'] ?? '',
       createdAt: data['createdAt'] != null
           ? (data['createdAt'] as Timestamp).toDate()
           : null,
@@ -41,8 +41,8 @@ class KurirModel extends Kurir {
       'namaKurir': namaKurir,
       'nomorTlp': nomorTlp,
       'email': email,
-      'kendaraan': kendaraan,
-      'status': status,
+      'layanan': layanan,
+      'gudangId': gudangId,
       'createdAt': isNew
           ? FieldValue.serverTimestamp()
           : (createdAt != null

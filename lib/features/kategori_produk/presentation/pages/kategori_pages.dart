@@ -12,6 +12,10 @@ class KategoriPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kategori Pages'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         actions: [
           IconButton(
             onPressed: () {

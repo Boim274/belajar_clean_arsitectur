@@ -4,23 +4,30 @@ import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/p
 import 'package:belajar_clean_arsitectur/features/kurir/presentation/pages/kurir_pages.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/pages/produk_pages.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/pages/suplier_pages.dart';
+import 'package:belajar_clean_arsitectur/home.dart';
 import 'package:go_router/go_router.dart';
 
 class MyRouter {
   get router => GoRouter(
         initialLocation: '/',
         routes: [
-          // Route untuk halaman produk
           GoRoute(
             path: '/',
+            name: 'home',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: HomePage()),
+          ),
+          // Route untuk halaman produk
+          GoRoute(
+            path: '/produk',
             name: 'produk',
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: ProdukPages()),
           ),
           // Route untuk halaman kategori
           GoRoute(
-            path: '/kategoris',
-            name: 'kategoris',
+            path: '/kategori',
+            name: 'kategori',
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: KategoriPages()),
           ),
@@ -31,8 +38,8 @@ class MyRouter {
                 const NoTransitionPage(child: JenisPages()),
           ),
           GoRoute(
-            path: '/supliers',
-            name: 'supliers',
+            path: '/suplier',
+            name: 'suplier',
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: SuplierPages()),
           ),
