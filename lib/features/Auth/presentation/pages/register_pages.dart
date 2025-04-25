@@ -1,5 +1,6 @@
-import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/login_pages1.dart';
+import 'package:belajar_clean_arsitectur/features/Auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterPages extends StatelessWidget {
@@ -9,15 +10,15 @@ class RegisterPages extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    // TextEditingController usernameController = TextEditingController();
+    TextEditingController usernameController = TextEditingController();
     // TextEditingController confirmPasswordController = TextEditingController();
     return Scaffold(
       body: Column(
         children: [
           // form username
-          // TextFormField(
-          //   controller: usernameController,
-          // ),
+          TextFormField(
+            controller: usernameController,
+          ),
           const SizedBox(height: 15),
           //form email
           TextFormField(
@@ -41,13 +42,20 @@ class RegisterPages extends StatelessWidget {
           ),
 
           const SizedBox(height: 15),
-          // //form konfirmasi password
+          //form konfirmasi password
           // TextFormField(
           //   controller: confirmPasswordController,
           // ),
           const SizedBox(height: 15),
           // button register
-          ElevatedButton(onPressed: () {}, child: const Text('Register'))
+          ElevatedButton(
+              onPressed: () {
+                context.read<AuthBloc>().add(AuthEventRegister(
+                    name: usernameController.text,
+                    email: emailController.text,
+                    password: passwordController.text));
+              },
+              child: const Text('Register'))
         ],
       ),
     );

@@ -30,10 +30,10 @@ class AuthRepositoriesImplementation implements AuthRepository {
 
   @override
   Future<Either<Exception, UserEntity>> createUserWithEmailAndPassword(
-      String email, String password) async {
+      String name, String email, String password) async {
     try {
-      final data =
-          await dataSource.createUserWithEmailAndPassword(email, password);
+      final data = await dataSource.createUserWithEmailAndPassword(
+          name, email, password);
       return Right(data);
     } catch (e) {
       return Left(Exception(e.toString()));

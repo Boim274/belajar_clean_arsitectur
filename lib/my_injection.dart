@@ -55,12 +55,16 @@ Future<void> init() async {
   myinjection.registerFactory(
     () => AuthBloc(
       signInWithEmail: myinjection(),
+      registerWithEmail: myinjection(),
     ),
   );
 
   // USECASE
   myinjection.registerLazySingleton(
     () => SignInWithEmail(repository: myinjection()),
+  );
+  myinjection.registerLazySingleton(
+    () => RegisterWithEmail(repository: myinjection()),
   );
 
   // REPOSITORY

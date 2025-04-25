@@ -26,3 +26,27 @@ class SignInWithEmailParams {
   SignInWithEmailParams({required this.email, required this.password});
 }
 
+class RegisterWithEmail
+    implements UseCase<UserEntity, RegisterWithEmailParams> {
+  final AuthRepository repository;
+
+  RegisterWithEmail({required this.repository});
+
+  @override
+  Future<Either<Exception, UserEntity>> call(
+      RegisterWithEmailParams params) async {
+    return await repository.createUserWithEmailAndPassword(
+      params.name,
+      params.email,
+      params.password,
+    );
+  }
+}
+
+class RegisterWithEmailParams {
+  final String name;
+  final String email;
+  final String password;
+
+  RegisterWithEmailParams({required this.name, required this.email, required this.password});
+}

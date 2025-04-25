@@ -8,6 +8,7 @@ abstract class AuthRepository {
     String password,
   );
   Future<Either<Exception, UserEntity>> createUserWithEmailAndPassword(
+    String name,
     String email,
     String password,
   );

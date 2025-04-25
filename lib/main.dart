@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             signInWithEmail: myinjection(),
+            registerWithEmail: myinjection(),
           ),
         ),
         BlocProvider<ProdukBloc>(

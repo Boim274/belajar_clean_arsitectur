@@ -15,10 +15,12 @@ class AuthEventLogin extends AuthEvent {
 }
 
 class AuthEventRegister extends AuthEvent {
+  final String name;
   final String email;
   final String password;
 
-  AuthEventRegister({required this.email, required this.password});
+  AuthEventRegister(
+      {required this.name, required this.email, required this.password});
 
   @override
   List<Object?> get props => [];
