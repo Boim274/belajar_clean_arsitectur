@@ -1,3 +1,4 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/data/models/jenis_model.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,15 @@ class JenisPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Jenis Pages'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -122,6 +129,7 @@ class JenisPages extends StatelessWidget {
           )
         ],
       ),
+      drawer: CustomDrawer(),
       body: BlocBuilder<JenisProdukBloc, JenisProdukState>(
         bloc: context.read<JenisProdukBloc>()..add(JenisEventGetAll()),
         builder: (context, state) {

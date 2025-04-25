@@ -7,6 +7,11 @@ abstract class AuthRepository {
     String email,
     String password,
   );
+  Future<Either<Exception, UserEntity>> createUserWithEmailAndPassword(
+    String email,
+    String password,
+  );
+
   Future<Either<Exception, UserEntity>> signInWithGoogle();
   Future<Either<Exception, void>> signOut();
 }

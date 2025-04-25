@@ -1,4 +1,6 @@
+import 'package:belajar_clean_arsitectur/core/components/cubit/option/option_cubit.dart';
 import 'package:belajar_clean_arsitectur/core/routes/routes.dart';
+import 'package:belajar_clean_arsitectur/features/Auth/presentation/bloc/auth_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
@@ -29,6 +31,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<OptionCubit>(
+          create: (context) => OptionCubit(),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            signInWithEmail: myinjection(),
+          ),
+        ),
         BlocProvider<ProdukBloc>(
           create: (context) => ProdukBloc(
               produkUsecasesAdd: myinjection(),

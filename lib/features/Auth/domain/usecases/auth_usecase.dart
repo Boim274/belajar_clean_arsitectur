@@ -25,3 +25,4 @@ class SignInWithEmailParams {
 
   SignInWithEmailParams({required this.email, required this.password});
 }
+

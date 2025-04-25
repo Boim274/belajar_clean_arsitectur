@@ -21,10 +21,10 @@ class KurirModel extends Kurir {
 
     return KurirModel(
       id: doc.id,
-      namaKurir: data['namaKurir'] ?? '',
-      nomorTlp: data['nomorTlp'] ?? '',
-      email: data['email'] ?? '',
-      layanan: data['layanan'] ?? '',
+      namaKurir: data['namaKurir'],
+      nomorTlp: data['nomorTlp'],
+      email: data['email'],
+      layanan: data['layanan'],
       gudangId: data['gudangId'] ?? '',
       createdAt: data['createdAt'] != null
           ? (data['createdAt'] as Timestamp).toDate()
@@ -42,7 +42,7 @@ class KurirModel extends Kurir {
       'nomorTlp': nomorTlp,
       'email': email,
       'layanan': layanan,
-      'gudangId': gudangId,
+      'gudangId': gudangId ?? '',
       'createdAt': isNew
           ? FieldValue.serverTimestamp()
           : (createdAt != null

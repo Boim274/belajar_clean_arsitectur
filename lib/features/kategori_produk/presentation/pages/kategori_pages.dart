@@ -1,3 +1,4 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/data/models/kategori_produk_model.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,15 @@ class KategoriPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kategori Pages'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -124,6 +131,7 @@ class KategoriPages extends StatelessWidget {
           )
         ],
       ),
+     drawer: CustomDrawer(),
       body: BlocBuilder<KategoriProdukBloc, KategoriProdukState>(
         bloc: context.read<KategoriProdukBloc>()
           ..add(KategoriProdukEventGetAll()),

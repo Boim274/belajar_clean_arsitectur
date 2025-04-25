@@ -1,3 +1,5 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
+import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kurir/data/models/kurir_model.dart';
 import 'package:belajar_clean_arsitectur/features/kurir/presentation/bloc/kurir_bloc.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,15 @@ class KurirPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kurir Pages'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -32,7 +40,7 @@ class KurirPages extends StatelessWidget {
                       TextEditingController();
                   TextEditingController layananController =
                       TextEditingController();
-
+                  String? selectedValueGudangId;
                   // Form Key untuk validasi
                   final formKey = GlobalKey<FormState>();
 
@@ -112,6 +120,44 @@ class KurirPages extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
 
+                          // dropdown gudang
+                          BlocBuilder<GudangBloc, GudangState>(
+                            bloc: context.read<GudangBloc>()
+                              ..add(GudangEventGetAll()),
+                            builder: (context, state) {
+                              if (state is GudangStateError) {
+                                return Text(state.message);
+                              }
+                              if (state is GudangStateLoadedAll) {
+                                final gudang = state.gudangs;
+                                return DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Gudang',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: selectedValueGudangId,
+                                  items: gudang
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(e.namaGudang)),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    selectedValueGudangId = value;
+                                  },
+                                  // validasi
+                                  validator: (value) => value == null
+                                      ? 'Gudang wajib dipilih'
+                                      : null,
+                                );
+                              }
+                              // Saat loading
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                          const SizedBox(height: 20),
+
                           // Tombol Simpan dengan validasi
                           BlocConsumer<KurirBloc, KurirState>(
                             listener: (context, state) {
@@ -136,6 +182,7 @@ class KurirPages extends StatelessWidget {
                                           KurirEventAdd(
                                             kurirModel: KurirModel(
                                               id: '',
+                                              gudangId: selectedValueGudangId,
                                               namaKurir:
                                                   namaKurirController.text,
                                               nomorTlp:
@@ -166,6 +213,7 @@ class KurirPages extends StatelessWidget {
           )
         ],
       ),
+      drawer: CustomDrawer(),
       body: BlocBuilder<KurirBloc, KurirState>(
         bloc: context.read<KurirBloc>()..add(KurirEventGetAll()),
         builder: (context, state) {
@@ -219,12 +267,17 @@ class KurirPages extends StatelessWidget {
                                           final layananController =
                                               TextEditingController(
                                                   text: kurir.layanan);
-
+                                          String? selectedValueGudangId =
+                                              kurir.gudangId;
+                                          context
+                                              .read<GudangBloc>()
+                                              .add(GudangEventGetAll());
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
+                                                // edit nama kurir
                                                 TextFormField(
                                                   controller: namaController,
                                                   decoration:
@@ -235,6 +288,8 @@ class KurirPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
+
+                                                // edit nomor tlp
                                                 TextFormField(
                                                   controller:
                                                       nomorTlpController,
@@ -253,6 +308,8 @@ class KurirPages extends StatelessWidget {
                                                   ],
                                                 ),
                                                 const SizedBox(height: 20),
+
+                                                // edit email
                                                 TextFormField(
                                                   controller: emailController,
                                                   decoration:
@@ -263,6 +320,8 @@ class KurirPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 20),
+
+                                                // edit layanan
                                                 TextFormField(
                                                   controller: layananController,
                                                   decoration:
@@ -273,6 +332,56 @@ class KurirPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 20),
+
+                                                // edit dropdown gudang
+                                                BlocBuilder<GudangBloc,
+                                                    GudangState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is GudangStateError) {
+                                                      return Text(
+                                                          state.message);
+                                                    }
+
+                                                    if (state
+                                                        is GudangStateLoadedAll) {
+                                                      final gudang =
+                                                          state.gudangs;
+
+                                                      return DropdownButtonFormField<
+                                                          String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Gudang',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        value:
+                                                            selectedValueGudangId, // nilai awal diisi untuk edit
+                                                        items: gudang.map((e) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: e.id,
+                                                            child: Text(
+                                                                e.namaGudang),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {
+                                                          selectedValueGudangId =
+                                                              value;
+                                                        },
+                                                        validator: (value) =>
+                                                            value == null
+                                                                ? 'Gudang wajib dipilih'
+                                                                : null,
+                                                      );
+                                                    }
+
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
@@ -282,6 +391,8 @@ class KurirPages extends StatelessWidget {
                                                             kurirModel:
                                                                 KurirModel(
                                                               id: kurir.id,
+                                                              gudangId:
+                                                                  selectedValueGudangId,
                                                               namaKurir:
                                                                   namaController
                                                                       .text,

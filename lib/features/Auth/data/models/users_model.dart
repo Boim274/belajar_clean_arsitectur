@@ -6,15 +6,16 @@ class UsersModel extends UserEntity {
   UsersModel(
       {required super.id,
       required super.email,
-      required super.name,
+      super.name,
       required super.lastLogin,
-      required super.photoUrl});
+      super.photoUrl});
   factory UsersModel.fromJson(User user) {
     return UsersModel(
-        id: user.uid,
-        email: user.email!,
-        name: user.displayName!,
-        lastLogin: user.metadata.lastSignInTime!,
-        photoUrl: user.photoURL!);
+      id: user.uid,
+      email: user.email!,
+      name: user.displayName,
+      lastLogin: user.metadata.lastSignInTime!,
+      photoUrl: user.photoURL,
+    );
   }
 }

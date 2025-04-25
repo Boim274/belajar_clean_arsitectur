@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/src/material/dropdown.dart';
 
 class Gudang extends Equatable {
   final String id;
@@ -32,6 +31,4 @@ class Gudang extends Equatable {
         createdAt,
         updatedAt
       ];
-
-  map(DropdownMenuItem<String> Function(dynamic gudang) param0) {}
 }

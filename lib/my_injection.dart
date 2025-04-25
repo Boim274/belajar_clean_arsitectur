@@ -1,3 +1,4 @@
+import 'package:belajar_clean_arsitectur/core/components/cubit/option/option_cubit.dart';
 import 'package:belajar_clean_arsitectur/features/Auth/data/datasources/auth_datasource.dart';
 import 'package:belajar_clean_arsitectur/features/Auth/data/repositories/auth_repositories_implementation.dart';
 import 'package:belajar_clean_arsitectur/features/Auth/domain/repositories/users_repositories.dart';
@@ -43,6 +44,11 @@ Future<void> init() async {
   myinjection.registerLazySingleton(() => FirebaseAuth.instance);
   myinjection.registerLazySingleton(() => FirebaseFirestore.instance);
   // myinjection.registerLazySingleton(() => FirebaseStorage.instance);
+
+// Option
+  myinjection.registerFactory(
+    () => OptionCubit(),
+  );
 //-------------------------------------------------------------------------------------------
   /// FEATURE - AUTH
   // BLOC

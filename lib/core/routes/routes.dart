@@ -1,3 +1,6 @@
+import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/login_pages.dart';
+import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/login_pages1.dart';
+import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/register_pages.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/pages/gudang_pages.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/pages/jenis_pages.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/pages/kategori_pages.dart';
@@ -13,9 +16,15 @@ class MyRouter {
         routes: [
           GoRoute(
             path: '/',
-            name: 'home',
+            name: 'login',
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: HomePage()),
+                const NoTransitionPage(child: LoginPages()),
+          ),
+          GoRoute(
+            path: '/register',
+            name: 'register',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: RegisterPages()),
           ),
           // Route untuk halaman produk
           GoRoute(

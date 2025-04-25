@@ -27,4 +27,16 @@ class AuthRepositoriesImplementation implements AuthRepository {
   Future<Either<Exception, void>> signOut() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Exception, UserEntity>> createUserWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      final data =
+          await dataSource.createUserWithEmailAndPassword(email, password);
+      return Right(data);
+    } catch (e) {
+      return Left(Exception(e.toString()));
+    }
+  }
 }

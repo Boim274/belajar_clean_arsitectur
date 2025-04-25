@@ -1,3 +1,4 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
@@ -16,9 +17,15 @@ class ProdukPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Produk'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -154,7 +161,7 @@ class ProdukPages extends StatelessWidget {
                                     labelText: 'Jenis',
                                     border: OutlineInputBorder(),
                                   ),
-                                  value: selectedValueCategoryId,
+                                  value: selectedValueJenisId,
                                   items: jenis
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -192,7 +199,7 @@ class ProdukPages extends StatelessWidget {
                                     labelText: 'Gudang',
                                     border: OutlineInputBorder(),
                                   ),
-                                  value: selectedValueCategoryId,
+                                  value: selectedValueGudangId,
                                   items: gudang
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -273,6 +280,7 @@ class ProdukPages extends StatelessWidget {
           )
         ],
       ),
+      drawer: CustomDrawer(),
       body: BlocBuilder<ProdukBloc, ProdukState>(
         bloc: context.read<ProdukBloc>()..add(ProdukEventGetAll()),
         builder: (context, state) {
@@ -329,7 +337,7 @@ class ProdukPages extends StatelessWidget {
                                               produk.jenisId;
                                           String? selectedValueGudangId =
                                               produk.gudangId;
-                                          // penmbahan context agar bbisa terbaca
+                                          // penmbahan context agar bisa terbaca
                                           context
                                               .read<KategoriProdukBloc>()
                                               .add(KategoriProdukEventGetAll());

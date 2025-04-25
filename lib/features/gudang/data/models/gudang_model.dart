@@ -22,10 +22,10 @@ class GudangModel extends Gudang {
     return GudangModel(
       id: doc.id,
       suplierId: data['suplierId'] ?? '',
-      namaGudang: data['namaGudang'] ?? '',
-      alamat: data['alamat'] ?? '',
-      nomorTlp: data['nomorTlp'] ?? '',
-      kapasitas: data['kapasitas'] ?? '',
+      namaGudang: data['namaGudang'],
+      alamat: data['alamat'],
+      nomorTlp: data['nomorTlp'],
+      kapasitas: data['kapasitas'],
       createdAt: data['createdAt'] != null
           ? (data['createdAt'] as Timestamp).toDate()
           : null,
@@ -38,7 +38,7 @@ class GudangModel extends Gudang {
 
   Map<String, dynamic> toFireStore() {
     return {
-      'suplierId': suplierId,
+      'suplierId': suplierId ?? '',
       'namaGudang': namaGudang,
       'alamat': alamat,
       'nomorTlp': nomorTlp,

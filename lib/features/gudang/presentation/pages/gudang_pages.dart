@@ -1,5 +1,7 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/data/models/gudang_model.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/suplier/presentation/bloc/suplier_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +15,15 @@ class GudangPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gudang Pages'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -32,7 +40,7 @@ class GudangPages extends StatelessWidget {
                       TextEditingController();
                   TextEditingController kapasitasGudangController =
                       TextEditingController();
-
+                  String? selectedValueSuplierId;
                   // Form Key untuk validasi
                   final formKey = GlobalKey<FormState>();
 
@@ -108,7 +116,44 @@ class GudangPages extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 16),
+                          // Dropdown Suplier
+                          BlocBuilder<SuplierBloc, SuplierState>(
+                            bloc: context.read<SuplierBloc>()
+                              ..add(SuplierEventGetAll()),
+                            builder: (context, state) {
+                              if (state is SuplierStateError) {
+                                return Text(state.message);
+                              }
+                              if (state is SuplierStateLoadedAll) {
+                                final suplier = state.supliers;
 
+                                return DropdownButtonFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Suplier',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: selectedValueSuplierId,
+                                  items: suplier
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                            value: e.id,
+                                            child: Text(e.namaSuplier)),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) {
+                                    selectedValueSuplierId = value;
+                                  },
+                                  // validasi
+                                  validator: (value) => value == null
+                                      ? 'Suplier wajib dipilih'
+                                      : null,
+                                );
+                              }
+                              // Saat loading
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                          const SizedBox(height: 20),
                           // Tombol Simpan dengan validasi
                           BlocConsumer<GudangBloc, GudangState>(
                             listener: (context, state) {
@@ -133,6 +178,7 @@ class GudangPages extends StatelessWidget {
                                           GudangEventAdd(
                                             gudangModel: GudangModel(
                                               id: '',
+                                              suplierId: selectedValueSuplierId,
                                               namaGudang:
                                                   namaGudangController.text,
                                               alamat:
@@ -166,6 +212,7 @@ class GudangPages extends StatelessWidget {
           )
         ],
       ),
+      drawer: CustomDrawer(),
       body: BlocBuilder<GudangBloc, GudangState>(
         bloc: context.read<GudangBloc>()..add(GudangEventGetAll()),
         builder: (context, state) {
@@ -219,12 +266,17 @@ class GudangPages extends StatelessWidget {
                                           final kapasitasController =
                                               TextEditingController(
                                                   text: gudang.kapasitas);
-
+                                          String? selectedValueSuplierId =
+                                              gudang.suplierId;
+                                          context
+                                              .read<SuplierBloc>()
+                                              .add(SuplierEventGetAll());
                                           return Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
+                                                // edit nama gudang
                                                 TextFormField(
                                                   controller: namaController,
                                                   decoration:
@@ -235,6 +287,7 @@ class GudangPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
+                                                // edit alamat
                                                 TextFormField(
                                                   controller: alamatController,
                                                   decoration:
@@ -245,6 +298,7 @@ class GudangPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
+                                                // edit nomo tlp
                                                 TextFormField(
                                                   controller:
                                                       nomorTlpController,
@@ -263,6 +317,7 @@ class GudangPages extends StatelessWidget {
                                                   ],
                                                 ),
                                                 const SizedBox(height: 20),
+                                                // edit kapasistas
                                                 TextFormField(
                                                   controller:
                                                       kapasitasController,
@@ -274,6 +329,56 @@ class GudangPages extends StatelessWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(height: 16),
+
+                                                // Dtropdown edit suplier
+                                                BlocBuilder<SuplierBloc,
+                                                    SuplierState>(
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is SuplierStateError) {
+                                                      return Text(
+                                                          state.message);
+                                                    }
+
+                                                    if (state
+                                                        is SuplierStateLoadedAll) {
+                                                      final suplier =
+                                                          state.supliers;
+
+                                                      return DropdownButtonFormField<
+                                                          String>(
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Suplier',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        value:
+                                                            selectedValueSuplierId, // nilai awal diisi untuk edit
+                                                        items: suplier.map((e) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: e.id,
+                                                            child: Text(
+                                                                e.namaSuplier),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {
+                                                          selectedValueSuplierId =
+                                                              value;
+                                                        },
+                                                        validator: (value) =>
+                                                            value == null
+                                                                ? 'Suplier wajib dipilih'
+                                                                : null,
+                                                      );
+                                                    }
+
+                                                    return const CircularProgressIndicator();
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+
                                                 ElevatedButton.icon(
                                                   onPressed: () {
                                                     context
@@ -283,6 +388,8 @@ class GudangPages extends StatelessWidget {
                                                             gudangModel:
                                                                 GudangModel(
                                                               id: gudang.id,
+                                                              suplierId:
+                                                                  selectedValueSuplierId,
                                                               namaGudang:
                                                                   namaController
                                                                       .text,
