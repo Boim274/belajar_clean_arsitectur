@@ -621,6 +621,7 @@ class ProdukPages extends StatelessWidget {
                                       );
                                     },
                                   ),
+                                  //button shopping
                                   IconButton(
                                     icon: const Icon(Icons.shopping_cart),
                                     onPressed: () {
@@ -648,6 +649,9 @@ class ProdukPages extends StatelessWidget {
                                       );
                                     },
                                   ),
+                                  // buttom favorite
+                               
+
                                 ],
                               ),
                             ),
@@ -658,6 +662,7 @@ class ProdukPages extends StatelessWidget {
           );
         },
       ),
+    
     );
   }
 }

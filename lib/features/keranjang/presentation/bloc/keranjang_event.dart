@@ -41,3 +41,4 @@ class KeranjangEventGetById extends KeranjangEvent {
   @override
   List<Object?> get props => [id];
 }
+

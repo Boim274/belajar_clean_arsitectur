@@ -26,8 +26,8 @@ class CustomDrawer extends StatelessWidget {
                   'https://pbs.twimg.com/profile_images/1775909266739564545/mBGUHnkP_400x400.jpg'), // fallback foto default
             ),
             accountName: Text(
-              'Ibrahim-data-dumy',
-              // user?.displayName ?? 'Guest',
+              // 'Ibrahim-data-dumy',
+              user?.displayName ?? 'Guest',
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
@@ -45,6 +45,12 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
+                 _buildDrawerItem(
+                  context,
+                  icon: Icons.shopping_bag_outlined,
+                  text: 'Produk Card',
+                  onTap: () => context.go('/produkCard'),
+                ),
                 _buildDrawerItem(
                   context,
                   icon: Icons.shopping_bag,
@@ -86,6 +92,12 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.shopping_cart,
                   text: 'Keranjang',
                   onTap: () => context.go('/keranjang'),
+                ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.favorite,
+                  text: 'Favorite',
+                  onTap: () => context.go('/favorite'),
                 ),
               ],
             ),

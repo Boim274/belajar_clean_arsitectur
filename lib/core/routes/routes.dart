@@ -1,11 +1,13 @@
 import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/login_pages.dart';
 
 import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/register_pages.dart';
+import 'package:belajar_clean_arsitectur/features/favorite/presentation/pages/favorite_pages.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/pages/gudang_pages.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/pages/jenis_pages.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/pages/kategori_pages.dart';
 import 'package:belajar_clean_arsitectur/features/keranjang/presentation/pages/keranjang_pages.dart';
 import 'package:belajar_clean_arsitectur/features/kurir/presentation/pages/kurir_pages.dart';
+import 'package:belajar_clean_arsitectur/features/produk/presentation/pages/produk_card_pages.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/pages/produk_pages.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/pages/suplier_pages.dart';
 
@@ -70,6 +72,18 @@ class MyRouter {
             name: 'keranjang',
             pageBuilder: (context, state) =>
                 const NoTransitionPage(child: KeranjangPage()),
+          ),
+          GoRoute(
+            path: '/favorite',
+            name: 'favorite',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: FavoritePages()),
+          ),
+          GoRoute(
+            path: '/produkCard',
+            name: 'produkCard',
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ProdukCardPages()),
           ),
         ],
       );

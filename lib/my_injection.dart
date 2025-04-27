@@ -79,7 +79,11 @@ Future<void> init() async {
 
   // DATA SOURCE
   myinjection.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImplementation(firebaseAuth: myinjection()));
+    () => AuthRemoteDataSourceImplementation(
+      firebaseAuth: myinjection<FirebaseAuth>(),
+      firebaseFirestore: myinjection<FirebaseFirestore>(),
+    ),
+  );
 
   /// FEATURE - PRODUK
   // BLOC
@@ -323,6 +327,7 @@ Future<void> init() async {
       keranjangUsecasesDeleteKeranjang: myinjection(),
       keranjangUsecasesGetAll: myinjection(),
       keranjangUsecasesGetById: myinjection(),
+      
     ),
   );
 

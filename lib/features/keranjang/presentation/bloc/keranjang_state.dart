@@ -42,3 +42,4 @@ class KeranjangStateSuccess extends KeranjangState {
   @override
   List<Object?> get props => [];
 }
+
