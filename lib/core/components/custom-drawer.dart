@@ -1,74 +1,140 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
-    super.key,
-  });
+  const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final User? user =
+        FirebaseAuth.instance.currentUser; // 👉 ambil user yang login
+
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.all(5),
+      child: Column(
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
+              color: Colors.blueAccent,
+            ),
+            currentAccountPicture: CircleAvatar(
+              // backgroundImage: user?.photoURL != null
+              //     ? NetworkImage(user!.photoURL!)
+              //     : const AssetImage('assets/default_profile.png')
+              //         as ImageProvider, // fallback foto default
+              backgroundImage: const NetworkImage(
+                  'https://pbs.twimg.com/profile_images/1775909266739564545/mBGUHnkP_400x400.jpg'), // fallback foto default
+            ),
+            accountName: Text(
+              'Ibrahim-data-dumy',
+              // user?.displayName ?? 'Guest',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: Colors.white),
+            ),
+            accountEmail: Text(
+              user?.email ?? 'guest@example.com',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.white70),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade300,
-                    borderRadius: BorderRadius.circular(80),
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                            'https://upload.wikimedia.org/wikipedia/commons/8/88/President_Megawati_Sukarnoputri_-_Indonesia.jpg')),
-                  ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.shopping_bag,
+                  text: 'Produk',
+                  onTap: () => context.go('/produk'),
                 ),
-                SizedBox(
-                  width: 4,
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.category,
+                  text: 'Kategori Produk',
+                  onTap: () => context.go('/kategori'),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Ibrahim'),
-                    Text('Email: ibra@gmail.com'),
-                  ],
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.label,
+                  text: 'Jenis Produk',
+                  onTap: () => context.go('/jenis'),
+                ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.warehouse,
+                  text: 'Gudang',
+                  onTap: () => context.go('/gudang'),
+                ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.local_shipping,
+                  text: 'Kurir',
+                  onTap: () => context.go('/kurir'),
+                ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.store,
+                  text: 'Suplier',
+                  onTap: () => context.go('/suplier'),
+                ),
+                _buildDrawerItem(
+                  context,
+                  icon: Icons.shopping_cart,
+                  text: 'Keranjang',
+                  onTap: () => context.go('/keranjang'),
                 ),
               ],
             ),
           ),
+          const Divider(),
           ListTile(
-            title: Text('Produk'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
             onTap: () {
-              context.go('/produk');
-            },
-          ),
-          ListTile(
-            title: Text('Kategori Produk'),
-            onTap: () {
-              context.go('/kategori');
-            },
-          ),
-          ListTile(
-            title: Text('Jenis Produk'),
-            onTap: () {
-              context.go('/jenis');
-            },
-          ),
-          ListTile(
-            title: Text('Gudang'),
-            onTap: () {
-              context.go('/gudang');
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Konfirmasi Logout'),
+                    content: const Text('Yakin ingin logout?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Tutup dialog
+                        },
+                        child: const Text('Tidak'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut(); // Logout
+                          Navigator.of(context).pop(); // Tutup dialog
+                          context.go('/'); // Balik ke halaman login
+                        },
+                        child: const Text('Ya'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDrawerItem(BuildContext context,
+      {required IconData icon,
+      required String text,
+      required VoidCallback onTap}) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(text),
+      onTap: onTap,
     );
   }
 }

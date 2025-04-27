@@ -2,6 +2,8 @@ import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/keranjang/data/models/keranjang_model.dart';
+import 'package:belajar_clean_arsitectur/features/keranjang/presentation/bloc/keranjang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/produk/data/models/produk_model.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
 import 'package:flutter/material.dart';
@@ -585,11 +587,65 @@ class ProdukPages extends StatelessWidget {
                                       );
                                     },
                                   ),
+                                  // Button Hapus/Delete
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () {
-                                      context.read<ProdukBloc>().add(
-                                          ProdukEventDelete(id: produk.id));
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Konfirmasi'),
+                                          content: const Text(
+                                              'Yakin ingin menghapus produk ini?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(), // Tutup dialog
+                                              child: const Text('Tidak'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                context.read<ProdukBloc>().add(
+                                                      ProdukEventDelete(
+                                                          id: produk.id),
+                                                    );
+                                                Navigator.of(context)
+                                                    .pop(); // Tutup dialog setelah hapus
+                                              },
+                                              child: const Text('Ya'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.shopping_cart),
+                                    onPressed: () {
+                                      // Mengirim event untuk menambahkan produk ke keranjang
+                                      context.read<KeranjangBloc>().add(
+                                            KeranjangEventAdd(
+                                              keranjangModel: KeranjangModel(
+                                                id: UniqueKey()
+                                                    .toString(), // atau ID yang sesuai dari database
+                                                produkId: produk.id,
+                                                namaProduk: produk.namaProduk,
+                                                harga: produk.harga,
+                                                quantity:
+                                                    1, // Jumlah produk yang ditambahkan ke keranjang
+                                              ),
+                                            ),
+                                          );
+
+                                      // Menampilkan SnackBar setelah produk berhasil ditambahkan ke keranjang
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                '${produk.namaProduk} berhasil ditambahkan ke keranjang')),
+                                      );
                                     },
                                   ),
                                 ],

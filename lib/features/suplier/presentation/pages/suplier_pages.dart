@@ -1,3 +1,4 @@
+import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/data/models/suplier_model.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/bloc/suplier_bloc.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,15 @@ class SuplierPages extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Suplier Pages'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -148,6 +155,7 @@ class SuplierPages extends StatelessWidget {
           )
         ],
       ),
+      drawer: CustomDrawer(),
       body: BlocBuilder<SuplierBloc, SuplierState>(
         bloc: context.read<SuplierBloc>()..add(SuplierEventGetAll()),
         builder: (context, state) {
@@ -278,10 +286,38 @@ class SuplierPages extends StatelessWidget {
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () {
-                                      context.read<SuplierBloc>().add(
-                                          SuplierEventDelete(id: suplier.id));
+                                       showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Konfirmasi'),
+                                          content: const Text(
+                                              'Yakin ingin menghapus suplier ini?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(), // Tutup dialog
+                                              child: const Text('Tidak'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                context.read<SuplierBloc>().add(
+                                                      SuplierEventDelete(
+                                                          id: suplier.id),
+                                                    );
+                                                Navigator.of(context)
+                                                    .pop(); // Tutup dialog setelah hapus
+                                              },
+                                              child: const Text('Ya'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      // context.read<SuplierBloc>().add(
+                                      //     SuplierEventDelete(id: suplier.id));
                                     },
                                   ),
                                 ],

@@ -13,13 +13,14 @@ class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
   final ProdukUsecasesDeleteProduk produkUsecasesDeleteProduk;
   final ProdukUsecasesGetAll produkUsecasesGetAll;
   final ProdukUsecasesGetById produkUsecasesGetById;
-  ProdukBloc(
-      {required this.produkUsecasesAdd,
-      required this.produkUsecasesEditProduk,
-      required this.produkUsecasesDeleteProduk,
-      required this.produkUsecasesGetAll,
-      required this.produkUsecasesGetById})
-      : super(ProdukInitial()) {
+
+  ProdukBloc({
+    required this.produkUsecasesAdd,
+    required this.produkUsecasesEditProduk,
+    required this.produkUsecasesDeleteProduk,
+    required this.produkUsecasesGetAll,
+    required this.produkUsecasesGetById,
+  }) : super(ProdukInitial()) {
     on<ProdukEventAdd>((event, emit) async {
       emit(ProdukStateLoading());
       final data = await produkUsecasesAdd.execute(produk: event.produkModel);
@@ -29,9 +30,11 @@ class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
         },
         (r) {
           emit(ProdukStateSuccess());
+          add(ProdukEventGetAll()); // Reload produk setelah berhasil tambah
         },
       );
     });
+
     on<ProdukEventEdit>((event, emit) async {
       emit(ProdukStateLoading());
       final data =
@@ -42,9 +45,11 @@ class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
         },
         (r) {
           emit(ProdukStateSuccess());
+          add(ProdukEventGetAll()); // Memuat ulang produk setelah edit
         },
       );
     });
+
     on<ProdukEventDelete>((event, emit) async {
       emit(ProdukStateLoading());
       final data = await produkUsecasesDeleteProduk.execute(id: event.id);
@@ -54,9 +59,11 @@ class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
         },
         (r) {
           emit(ProdukStateSuccess());
+          add(ProdukEventGetAll()); // Memuat ulang produk setelah delete
         },
       );
     });
+
     on<ProdukEventGetAll>((event, emit) async {
       emit(ProdukStateLoading());
       final data = await produkUsecasesGetAll.execute();
@@ -69,6 +76,7 @@ class ProdukBloc extends Bloc<ProdukEvent, ProdukState> {
         },
       );
     });
+
     on<ProdukEventGetById>((event, emit) async {
       emit(ProdukStateLoading());
       final data = await produkUsecasesGetById.execute(id: event.id);

@@ -239,11 +239,41 @@ class JenisPages extends StatelessWidget {
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                   icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () {
-                                      context
-                                          .read<JenisProdukBloc>()
-                                          .add(JenisEventDelete(id: jenis.id));
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Konfirmasi'),
+                                          content: const Text(
+                                              'Yakin ingin menghapus jenis ini?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(), // Tutup dialog
+                                              child: const Text('Tidak'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<JenisProdukBloc>()
+                                                    .add(
+                                                      JenisEventDelete(
+                                                          id: jenis.id),
+                                                    );
+                                                Navigator.of(context)
+                                                    .pop(); // Tutup dialog setelah hapus
+                                              },
+                                              child: const Text('Ya'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      // context
+                                      //     .read<JenisProdukBloc>()
+                                      //     .add(JenisEventDelete(id: jenis.id));
                                     },
                                   ),
                                 ],

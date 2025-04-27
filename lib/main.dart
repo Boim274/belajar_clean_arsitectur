@@ -4,6 +4,7 @@ import 'package:belajar_clean_arsitectur/features/Auth/presentation/bloc/auth_bl
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/bloc/gudang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/bloc/jenis_produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kategori_produk/presentation/bloc/kategori_produk_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/keranjang/presentation/bloc/keranjang_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/kurir/presentation/bloc/kurir_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/bloc/produk_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/bloc/suplier_bloc.dart';
@@ -87,6 +88,14 @@ class MyApp extends StatelessWidget {
               kurirUsecaseDelete: myinjection(),
               kurirUsecaseGetAll: myinjection(),
               kurirUsecaseGetById: myinjection()),
+        ),
+        BlocProvider<KeranjangBloc>(
+          create: (context) => KeranjangBloc(
+              keranjangUsecasesAdd: myinjection(),
+              keranjangUsecasesEditKeranjang: myinjection(),
+              keranjangUsecasesDeleteKeranjang: myinjection(),
+              keranjangUsecasesGetAll: myinjection(),
+              keranjangUsecasesGetById: myinjection()),
         ),
       ],
       child: MaterialApp.router(

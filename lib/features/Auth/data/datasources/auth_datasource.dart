@@ -28,7 +28,7 @@ class AuthRemoteDataSourceImplementation extends AuthRemoteDataSource {
       } else if (e.code == 'email-already-in-use') {
         throw Exception('The account already exists for that email.');
       }
-      throw Exception("Error lainnya");
+      throw Exception("Email dan password harus di isi");
     } catch (e) {
       throw Exception(e);
     }
@@ -61,7 +61,7 @@ class AuthRemoteDataSourceImplementation extends AuthRemoteDataSource {
       } else if (e.code == 'email-already-in-use') {
         throw Exception("Email sudah terpakai");
       }
-      throw Exception("Error lainnya");
+      throw Exception("Harap isi semua form terlebih dahulu!");
     } catch (e) {
       throw Exception(e);
     }

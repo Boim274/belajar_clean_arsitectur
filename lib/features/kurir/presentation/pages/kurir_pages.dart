@@ -423,11 +423,39 @@ class KurirPages extends StatelessWidget {
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () {
-                                      context
-                                          .read<KurirBloc>()
-                                          .add(KurirEventDelete(id: kurir.id));
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Konfirmasi'),
+                                          content: const Text(
+                                              'Yakin ingin menghapus kurir ini?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(), // Tutup dialog
+                                              child: const Text('Tidak'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                context.read<KurirBloc>().add(
+                                                      KurirEventDelete(
+                                                          id: kurir.id),
+                                                    );
+                                                Navigator.of(context)
+                                                    .pop(); // Tutup dialog setelah hapus
+                                              },
+                                              child: const Text('Ya'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      // context
+                                      //     .read<KurirBloc>()
+                                      //     .add(KurirEventDelete(id: kurir.id));
                                     },
                                   ),
                                 ],

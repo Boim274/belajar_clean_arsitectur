@@ -9,13 +9,14 @@ class ProdukInitial extends ProdukState {
 
 class ProdukStateLoading extends ProdukState {
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => []; // Empty is fine, but can be updated if needed.
 }
 
 class ProdukStateError extends ProdukState {
   final String message;
 
   ProdukStateError({required this.message});
+
   @override
   List<Object?> get props => [message];
 }
@@ -40,5 +41,6 @@ class ProdukStateLoaded extends ProdukState {
 
 class ProdukStateSuccess extends ProdukState {
   @override
-  List<Object?> get props => [];
+  List<Object?> get props =>
+      []; // Empty is fine since it's just success indication
 }
