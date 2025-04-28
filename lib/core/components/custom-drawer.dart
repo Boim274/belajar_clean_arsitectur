@@ -1,14 +1,16 @@
+import 'package:belajar_clean_arsitectur/my_injection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final User? user =
-        FirebaseAuth.instance.currentUser; // 👉 ambil user yang login
+    final user = myinjection<Box>();
+    
 
     return Drawer(
       child: Column(
@@ -27,14 +29,14 @@ class CustomDrawer extends StatelessWidget {
             ),
             accountName: Text(
               // 'Ibrahim-data-dumy',
-              user?.displayName ?? 'Guest',
+              user.get('name') ?? 'Guest',
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
                   ?.copyWith(color: Colors.white),
             ),
             accountEmail: Text(
-              user?.email ?? 'guest@example.com',
+              user.get('email') ?? 'guest@example.com',
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -45,7 +47,7 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                 _buildDrawerItem(
+                _buildDrawerItem(
                   context,
                   icon: Icons.shopping_bag_outlined,
                   text: 'Produk Card',

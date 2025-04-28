@@ -1,6 +1,6 @@
-import 'package:belajar_clean_arsitectur/features/Auth/data/datasources/auth_datasource.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/domain/entities/users.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/domain/repositories/users_repositories.dart';
+import 'package:belajar_clean_arsitectur/features/auth/data/datasources/auth_datasource.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/entities/users.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/repositories/users_repositories.dart';
 import 'package:dartz/dartz.dart';
 
 class AuthRepositoriesImplementation implements AuthRepository {

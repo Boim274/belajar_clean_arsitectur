@@ -1,9 +1,9 @@
 import 'package:belajar_clean_arsitectur/core/components/cubit/option/option_cubit.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/data/datasources/auth_datasource.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/data/repositories/auth_repositories_implementation.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/domain/repositories/users_repositories.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/domain/usecases/auth_usecase.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/presentation/bloc/auth_bloc.dart';
+import 'package:belajar_clean_arsitectur/features/auth/data/datasources/auth_datasource.dart';
+import 'package:belajar_clean_arsitectur/features/auth/data/repositories/auth_repositories_implementation.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/repositories/users_repositories.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/usecases/auth_usecase.dart';
+import 'package:belajar_clean_arsitectur/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/data/datasources/gudang_datasource.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/data/repositories/gudang_repositorie.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/domain/repositories/gudang_repositorie.dart';
@@ -43,11 +43,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 var myinjection = GetIt.instance;
 Future<void> init() async {
   myinjection.registerLazySingleton(() => FirebaseAuth.instance);
   myinjection.registerLazySingleton(() => FirebaseFirestore.instance);
+  var box = await Hive.openBox('box');
+  myinjection.registerLazySingleton(() => box);
   // myinjection.registerLazySingleton(() => FirebaseStorage.instance);
 
 // Option
@@ -82,6 +85,7 @@ Future<void> init() async {
     () => AuthRemoteDataSourceImplementation(
       firebaseAuth: myinjection<FirebaseAuth>(),
       firebaseFirestore: myinjection<FirebaseFirestore>(),
+      box: myinjection(),
     ),
   );
 
@@ -327,7 +331,6 @@ Future<void> init() async {
       keranjangUsecasesDeleteKeranjang: myinjection(),
       keranjangUsecasesGetAll: myinjection(),
       keranjangUsecasesGetById: myinjection(),
-      
     ),
   );
 

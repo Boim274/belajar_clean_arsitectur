@@ -1,5 +1,5 @@
-import 'package:belajar_clean_arsitectur/features/Auth/domain/entities/users.dart';
-import 'package:belajar_clean_arsitectur/features/Auth/domain/usecases/auth_usecase.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/entities/users.dart';
+import 'package:belajar_clean_arsitectur/features/auth/domain/usecases/auth_usecase.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,6 +1,7 @@
-import 'package:belajar_clean_arsitectur/features/Auth/data/models/users_model.dart';
+import 'package:belajar_clean_arsitectur/features/auth/data/models/users_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UsersModel> signInWithEmailAndPassword(String email, String password);
@@ -13,20 +14,33 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImplementation extends AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final Box box;
 
   AuthRemoteDataSourceImplementation({
     required this.firebaseAuth,
     required this.firebaseFirestore,
+    required this.box,
   });
 
   @override
   Future<UsersModel> signInWithEmailAndPassword(
       String email, String password) async {
     try {
+      Box userBox = Hive.box('box');
       final credential = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+     
+      final userDoc = await firebaseFirestore
+          .collection('users')
+          .doc(credential.user!.uid)
+          .get();
+      await userBox.put('uid', credential.user!.uid);
+      await userBox.put('name', userDoc.data()!['name']);
+      await userBox.put('email', userDoc.data()!['email']);
+      await userBox.put('photoUrl', userDoc.data()!['photoUrl']);
+
       return UsersModel.fromJson(credential.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

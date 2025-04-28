@@ -1,6 +1,6 @@
-import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/login_pages.dart';
+import 'package:belajar_clean_arsitectur/features/auth/presentation/pages/login_pages.dart';
 
-import 'package:belajar_clean_arsitectur/features/Auth/presentation/pages/register_pages.dart';
+import 'package:belajar_clean_arsitectur/features/auth/presentation/pages/register_pages.dart';
 import 'package:belajar_clean_arsitectur/features/favorite/presentation/pages/favorite_pages.dart';
 import 'package:belajar_clean_arsitectur/features/gudang/presentation/pages/gudang_pages.dart';
 import 'package:belajar_clean_arsitectur/features/jenis_produk/presentation/pages/jenis_pages.dart';

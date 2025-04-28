@@ -8,7 +8,10 @@ class FavoritePages extends StatelessWidget {
   // Fungsi untuk menghapus produk dari koleksi favorite
   Future<void> removeFavorite(String favoriteId) async {
     try {
-      await FirebaseFirestore.instance.collection('favorites').doc(favoriteId).delete();
+      await FirebaseFirestore.instance
+          .collection('favorites')
+          .doc(favoriteId)
+          .delete();
     } catch (e) {
       print("Error removing favorite: $e");
     }
@@ -17,7 +20,8 @@ class FavoritePages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Firestore collection reference
-    final favoriteCollection = FirebaseFirestore.instance.collection('favorites');
+    final favoriteCollection =
+        FirebaseFirestore.instance.collection('favorites');
 
     return Scaffold(
       appBar: AppBar(
@@ -58,8 +62,13 @@ class FavoritePages extends StatelessWidget {
             future: Future.wait(
               favoriteDocs.map<Future<Map<String, dynamic>>>((favorite) async {
                 final produkId = favorite['produkId'];
-                final produkDoc = await FirebaseFirestore.instance.collection('produks').doc(produkId).get();
-                return produkDoc.exists ? produkDoc.data() as Map<String, dynamic> : {};
+                final produkDoc = await FirebaseFirestore.instance
+                    .collection('produks')
+                    .doc(produkId)
+                    .get();
+                return produkDoc.exists
+                    ? produkDoc.data() as Map<String, dynamic>
+                    : {};
               }).toList(),
             ),
             builder: (context, produkSnapshot) {
@@ -78,7 +87,8 @@ class FavoritePages extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final produk = produkList[index];
                   final favoriteId = favoriteDocs[index].id;
-                  if (produk.isEmpty) return Container(); // Menghindari produk kosong
+                  if (produk.isEmpty)
+                    return Container(); // Menghindari produk kosong
                   return Card(
                     margin: const EdgeInsets.all(8),
                     child: ListTile(
@@ -88,13 +98,15 @@ class FavoritePages extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Harga: ${produk['harga'] ?? 'Unknown'}'),
-                          Text('Deskripsi: ${produk['deskripsi'] ?? 'No description available.'}'),
+                          Text(
+                              'Deskripsi: ${produk['deskripsi'] ?? 'No description available.'}'),
                         ],
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
-                          removeFavorite(favoriteId); // Menghapus produk dari favorit
+                          removeFavorite(
+                              favoriteId); // Menghapus produk dari favorit
                         },
                       ),
                     ),
