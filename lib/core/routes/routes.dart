@@ -10,12 +10,18 @@ import 'package:belajar_clean_arsitectur/features/kurir/presentation/pages/kurir
 import 'package:belajar_clean_arsitectur/features/produk/presentation/pages/produk_card_pages.dart';
 import 'package:belajar_clean_arsitectur/features/produk/presentation/pages/produk_pages.dart';
 import 'package:belajar_clean_arsitectur/features/suplier/presentation/pages/suplier_pages.dart';
+import 'package:belajar_clean_arsitectur/my_injection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class MyRouter {
   get router => GoRouter(
-        initialLocation: '/',
+        initialLocation: myinjection<FirebaseAuth>().currentUser == null ||
+                myinjection<Box>().get('uid') == null
+            ? '/'
+            : '/produk',
         routes: [
           GoRoute(
             path: '/',
@@ -77,13 +83,13 @@ class MyRouter {
             path: '/favorite',
             name: 'favorite',
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: FavoritePages()),
+                 NoTransitionPage(child: FavoritePages()),
           ),
           GoRoute(
             path: '/produkCard',
             name: 'produkCard',
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: ProdukCardPages()),
+                 NoTransitionPage(child: ProdukCardPages()),
           ),
         ],
       );

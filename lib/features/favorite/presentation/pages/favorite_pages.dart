@@ -1,15 +1,23 @@
 import 'package:belajar_clean_arsitectur/core/components/custom-drawer.dart';
+import 'package:belajar_clean_arsitectur/my_injection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class FavoritePages extends StatelessWidget {
-  const FavoritePages({super.key});
+   FavoritePages({super.key});
 
-  // Fungsi untuk menghapus produk dari koleksi favorite
+  // Pakai myinjection, BUKAN Hive.box langsung
+  final Box user = myinjection<Box>();
+
+  // Fungsi untuk menghapus produk dari koleksi favorite user
   Future<void> removeFavorite(String favoriteId) async {
     try {
+      final uid = user.get('uid');
       await FirebaseFirestore.instance
-          .collection('favorites')
+          .collection('users')
+          .doc(uid)
+          .collection('favorite')
           .doc(favoriteId)
           .delete();
     } catch (e) {
@@ -19,9 +27,12 @@ class FavoritePages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Firestore collection reference
-    final favoriteCollection =
-        FirebaseFirestore.instance.collection('favorites');
+    final uid = user.get('uid');
+
+    final favoriteCollection = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('favorite');
 
     return Scaffold(
       appBar: AppBar(
@@ -41,22 +52,18 @@ class FavoritePages extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: favoriteCollection.snapshots(),
         builder: (context, snapshot) {
-          // Handle loading state
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Handle errors
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          // Handle empty state
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No favorites available.'));
           }
 
-          // Ambil data produk berdasarkan produkId di koleksi favorites
           final favoriteDocs = snapshot.data!.docs;
           return FutureBuilder<List<Map<String, dynamic>>>(
             future: Future.wait(
@@ -80,15 +87,15 @@ class FavoritePages extends StatelessWidget {
                 return Center(child: Text('Error: ${produkSnapshot.error}'));
               }
 
-              // Menampilkan produk favorit
               final produkList = produkSnapshot.data ?? [];
               return ListView.builder(
                 itemCount: produkList.length,
                 itemBuilder: (context, index) {
                   final produk = produkList[index];
                   final favoriteId = favoriteDocs[index].id;
-                  if (produk.isEmpty)
-                    return Container(); // Menghindari produk kosong
+
+                  if (produk.isEmpty) return Container(); // skip produk kosong
+
                   return Card(
                     margin: const EdgeInsets.all(8),
                     child: ListTile(
@@ -105,8 +112,7 @@ class FavoritePages extends StatelessWidget {
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
-                          removeFavorite(
-                              favoriteId); // Menghapus produk dari favorit
+                          removeFavorite(favoriteId);
                         },
                       ),
                     ),

@@ -650,8 +650,6 @@ class ProdukPages extends StatelessWidget {
                                     },
                                   ),
                                   // buttom favorite
-                               
-
                                 ],
                               ),
                             ),
@@ -662,7 +660,6 @@ class ProdukPages extends StatelessWidget {
           );
         },
       ),
-    
     );
   }
 }

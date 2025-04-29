@@ -156,7 +156,7 @@ class RegisterPages extends StatelessWidget {
                       );
                     }
                     if (state is AuthStateLoaded) {
-                      context.go('/produk');
+                      context.go('/');
                     }
                   },
                   builder: (context, state) {

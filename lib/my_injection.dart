@@ -86,6 +86,7 @@ Future<void> init() async {
       firebaseAuth: myinjection<FirebaseAuth>(),
       firebaseFirestore: myinjection<FirebaseFirestore>(),
       box: myinjection(),
+      
     ),
   );
 
