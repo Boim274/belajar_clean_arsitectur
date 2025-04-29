@@ -82,14 +82,28 @@ class _KeranjangPageState extends State<KeranjangPage> {
                         radius: 25,
                         backgroundColor: Colors.blueAccent,
                         child: Text(
-                          keranjang.quantity.toString(),
+                          '${index + 1}', // index mulai dari 0, jadi tambahkan +1
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      title: Text(keranjang.namaProduk,
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text('Rp: ${keranjang.harga}',
-                          style: TextStyle(color: Colors.grey[600])),
+                      title: Text(
+                        keranjang.namaProduk,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Rp: ${keranjang.harga}',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                          const SizedBox(height: 4), // Jarak kecil antar teks
+                          Text(
+                            'Qty: ${keranjang.quantity}', // Menampilkan quantity
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
