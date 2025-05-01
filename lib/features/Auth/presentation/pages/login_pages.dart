@@ -114,7 +114,7 @@ class LoginPages extends StatelessWidget {
                       );
                     }
                     if (state is AuthStateLoaded) {
-                      context.go('/produk');
+                      context.go('/produkCard');
                     }
                   },
                   builder: (context, state) {

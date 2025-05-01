@@ -21,7 +21,7 @@ class MyRouter {
         initialLocation: myinjection<FirebaseAuth>().currentUser == null ||
                 myinjection<Box>().get('uid') == null
             ? '/'
-            : '/produk',
+            : '/produkCard',
         routes: [
           GoRoute(
             path: '/',
